@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+}<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
@@ -14,7 +14,6 @@
            TOKENS DE DISEÑO (UI/UX Pro Max)
            ============================================================ */
         :root {
-            /* Colores - Sistema de tokens */
             --color-primary: #1A120E;
             --color-primary-light: #2C1810;
             --color-primary-dark: #0D0907;
@@ -29,8 +28,9 @@
             --color-text-light: #8A7A6A;
             --color-border: rgba(26, 18, 14, 0.08);
             --color-focus: #D4AF37;
+            --color-success: #22C55E;
+            --color-success-bg: rgba(34, 197, 94, 0.1);
             
-            /* Espaciado - Sistema 8px */
             --space-xs: 4px;
             --space-sm: 8px;
             --space-md: 16px;
@@ -39,7 +39,6 @@
             --space-2xl: 48px;
             --space-3xl: 64px;
             
-            /* Tipografía */
             --font-serif: 'Playfair Display', serif;
             --font-sans: 'Inter', sans-serif;
             --font-size-xs: 12px;
@@ -51,25 +50,21 @@
             --font-size-3xl: 40px;
             --font-size-4xl: 56px;
             
-            /* Radios */
             --radius-sm: 8px;
             --radius-md: 16px;
             --radius-lg: 24px;
             --radius-xl: 32px;
             --radius-full: 9999px;
             
-            /* Sombras */
             --shadow-sm: 0 2px 8px rgba(0,0,0,0.02);
             --shadow-md: 0 8px 32px rgba(0,0,0,0.04);
             --shadow-lg: 0 20px 60px rgba(0,0,0,0.06);
             --shadow-focus: 0 0 0 3px rgba(212, 175, 55, 0.3);
             
-            /* Transiciones */
             --transition-fast: 150ms cubic-bezier(0.23, 1, 0.32, 1);
             --transition-base: 300ms cubic-bezier(0.23, 1, 0.32, 1);
             --transition-slow: 500ms cubic-bezier(0.23, 1, 0.32, 1);
             
-            /* Z-index */
             --z-header: 100;
             --z-overlay: 200;
             --z-modal: 300;
@@ -95,24 +90,18 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* ============================================================
-           ACCESIBILIDAD - Focus visible
-           ============================================================ */
         :focus-visible {
             outline: 3px solid var(--color-focus);
             outline-offset: 2px;
         }
         
-        /* ============================================================
-           SCROLLBAR
-           ============================================================ */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--color-bg); }
         ::-webkit-scrollbar-thumb { 
             background: var(--color-gold); 
             border-radius: var(--radius-full);
         }
-        
+
         /* ============================================================
            HEADER
            ============================================================ */
@@ -199,10 +188,6 @@
         }
         .cart-btn:hover { 
             background: rgba(212, 175, 55, 0.06);
-        }
-        .cart-btn:focus-visible {
-            outline: 3px solid var(--color-focus);
-            outline-offset: 2px;
         }
         .cart-badge {
             position: absolute;
@@ -314,7 +299,6 @@
             max-width: 440px;
         }
 
-        /* Selector de productos */
         .product-selector {
             display: flex;
             gap: var(--space-sm);
@@ -343,10 +327,6 @@
             color: var(--color-text);
             transform: translateY(-1px);
             box-shadow: var(--shadow-md);
-        }
-        .product-selector button:focus-visible {
-            outline: 3px solid var(--color-focus);
-            outline-offset: 2px;
         }
         .product-selector button.active {
             background: var(--color-text);
@@ -383,11 +363,6 @@
             box-shadow: 0 8px 30px rgba(26, 18, 14, 0.1);
             background: var(--color-gold);
         }
-        .btn-primary:focus-visible {
-            outline: 3px solid var(--color-focus);
-            outline-offset: 2px;
-        }
-        
         .btn-secondary {
             background: transparent;
             color: var(--color-text);
@@ -408,12 +383,8 @@
             border-color: var(--color-gold);
             background: rgba(212, 175, 55, 0.04);
         }
-        .btn-secondary:focus-visible {
-            outline: 3px solid var(--color-focus);
-            outline-offset: 2px;
-        }
 
-        /* ===== HORNO CON VIDEO ===== */
+        /* ===== HORNO CON VIDEO Y GIF ===== */
         .oven-container {
             flex: 1;
             height: 580px;
@@ -431,48 +402,15 @@
             background: #1A120E;
             display: block;
         }
-        .video-fallback {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #FFFFFF;
+        #oven-gif {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
             background: #1A120E;
-            font-family: var(--font-sans);
-            padding: var(--space-xl);
-            text-align: center;
-        }
-        .video-fallback .icon {
-            font-size: 64px;
-            margin-bottom: var(--space-md);
-        }
-        .video-fallback h3 {
-            font-family: var(--font-serif);
-            font-size: var(--font-size-xl);
-            margin-bottom: var(--space-sm);
-        }
-        .video-fallback p {
-            color: rgba(255,255,255,0.6);
-            font-size: var(--font-size-sm);
-        }
-        .video-fallback .retry-btn {
-            margin-top: var(--space-md);
-            padding: var(--space-sm) var(--space-lg);
-            background: var(--color-gold);
-            border: none;
-            border-radius: var(--radius-full);
-            color: var(--color-text);
-            font-weight: 600;
-            cursor: pointer;
-            font-family: var(--font-sans);
-            min-height: 44px;
-        }
-        .video-fallback .retry-btn:hover {
-            background: var(--color-gold-dark);
+            display: none;
         }
 
+        /* Overlay de estado (encima del video) */
         .oven-overlay {
             position: absolute;
             bottom: var(--space-lg);
@@ -494,6 +432,7 @@
             font-family: var(--font-sans);
             letter-spacing: 0.2px;
             min-height: 48px;
+            transition: var(--transition-base);
         }
         .oven-overlay .dot {
             width: 8px;
@@ -502,6 +441,62 @@
             background: var(--color-gold);
             animation: pulse-dot 1.5s infinite;
             flex-shrink: 0;
+        }
+        .oven-overlay.done {
+            background: rgba(34, 197, 94, 0.9);
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+        .oven-overlay.done .dot {
+            background: #FFFFFF;
+            animation: none;
+        }
+
+        /* Botón de acción sobre el horno */
+        .oven-action-btn {
+            position: absolute;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 11;
+            padding: var(--space-md) var(--space-xl);
+            border: none;
+            border-radius: var(--radius-full);
+            font-family: var(--font-sans);
+            font-weight: 600;
+            font-size: var(--font-size-sm);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            min-height: 48px;
+            display: none;
+            align-items: center;
+            gap: var(--space-sm);
+            box-shadow: var(--shadow-lg);
+        }
+        .oven-action-btn.show {
+            display: inline-flex;
+            animation: fadeUp 0.5s ease;
+        }
+        .oven-action-btn.add-to-cart {
+            background: var(--color-gold);
+            color: var(--color-text);
+        }
+        .oven-action-btn.add-to-cart:hover {
+            background: var(--color-gold-dark);
+            transform: scale(1.02);
+        }
+        .oven-action-btn.hornear-again {
+            background: rgba(255,255,255,0.15);
+            color: #FFFFFF;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .oven-action-btn.hornear-again:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            100% { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
 
         /* ============================================================
@@ -598,10 +593,6 @@
         .product-card:hover::after {
             border-color: var(--color-gold);
         }
-        .product-card:focus-visible {
-            outline: 3px solid var(--color-focus);
-            outline-offset: 2px;
-        }
         .product-card .icon {
             font-size: 48px;
             margin-bottom: var(--space-sm);
@@ -655,10 +646,6 @@
         .btn-add:hover {
             background: var(--color-gold);
             transform: scale(1.02);
-        }
-        .btn-add:focus-visible {
-            outline: 3px solid var(--color-focus);
-            outline-offset: 2px;
         }
 
         /* ============================================================
@@ -774,10 +761,6 @@
         .btn-checkout:hover {
             background: var(--color-gold);
         }
-        .btn-checkout:focus-visible {
-            outline: 3px solid var(--color-focus);
-            outline-offset: 2px;
-        }
         
         .close-cart {
             position: absolute;
@@ -802,10 +785,6 @@
             color: var(--color-gold);
             background: rgba(212, 175, 55, 0.06);
         }
-        .close-cart:focus-visible {
-            outline: 3px solid var(--color-focus);
-            outline-offset: 2px;
-        }
         
         .cart-empty {
             text-align: center;
@@ -816,7 +795,7 @@
         }
 
         /* ============================================================
-           TOAST NOTIFICATIONS
+           TOAST
            ============================================================ */
         .toast-container {
             position: fixed;
@@ -889,10 +868,6 @@
         }
         .footer-links a:hover {
             color: var(--color-gold);
-        }
-        .footer-links a:focus-visible {
-            outline: 3px solid var(--color-focus);
-            outline-offset: 2px;
         }
 
         /* ============================================================
@@ -969,6 +944,12 @@
                 padding: var(--space-xs) var(--space-md);
                 min-height: 36px;
             }
+            .oven-action-btn {
+                bottom: 70px;
+                padding: var(--space-sm) var(--space-lg);
+                font-size: var(--font-size-xs);
+                min-height: 40px;
+            }
         }
         @media (max-width: 480px) {
             .grid-products {
@@ -1000,6 +981,9 @@
             }
             .btn-primary:hover {
                 transform: none !important;
+            }
+            .oven-action-btn.show {
+                animation: none !important;
             }
         }
     </style>
@@ -1035,7 +1019,7 @@
             <h1 id="hero-title">El <span>horno</span> mágico<br>de la panadería</h1>
             <p>
                 Selecciona un producto y mira el proceso de horneado en tiempo real.
-                ¡Cada video muestra el arte de la panadería!
+                ¡Al terminar, se agregará automáticamente a tu carrito!
             </p>
             <div class="product-selector" role="group" aria-label="Seleccionar producto para hornear">
                 <button data-product="pizza" class="active" aria-pressed="true">🍕 Pizza</button>
@@ -1054,19 +1038,24 @@
             </div>
         </div>
         <div class="oven-container" role="img" aria-label="Horno mostrando el proceso de horneado">
-            <video id="oven-video" autoplay loop muted playsinline aria-label="Video del proceso de horneado">
+            <!-- Video de horneado -->
+            <video id="oven-video" muted playsinline aria-label="Video del proceso de horneado">
                 <source src="" type="video/mp4">
             </video>
-            <div class="video-fallback" id="videoFallback" style="display:none;">
-                <span class="icon">🎬</span>
-                <h3>Video no disponible</h3>
-                <p>El video de horneado no pudo cargarse. Intenta de nuevo.</p>
-                <button class="retry-btn" id="retryVideo">🔄 Reintentar</button>
-            </div>
+            <!-- GIF publicitario (se muestra al terminar) -->
+            <img id="oven-gif" src="" alt="Publicidad del producto horneado" />
+            <!-- Estado -->
             <div class="oven-overlay" id="bakingStatus" role="status">
                 <span class="dot" aria-hidden="true"></span>
                 <span id="statusText">🎬 Selecciona un producto</span>
             </div>
+            <!-- Botones de acción (aparecen al terminar) -->
+            <button class="oven-action-btn add-to-cart" id="addToCartBtn">
+                🛒 Agregar al Carrito
+            </button>
+            <button class="oven-action-btn hornear-again" id="hornearAgainBtn">
+                🔄 Hornear otro
+            </button>
         </div>
     </section>
 
@@ -1119,7 +1108,7 @@
     ============================================================ -->
     <script>
         // ============================================================
-        // DATOS DE PRODUCTOS CON VIDEOS DE RESPALDO (100% funcionales)
+        // DATOS DE PRODUCTOS
         // ============================================================
         const PRODUCTS = [
             { 
@@ -1129,7 +1118,9 @@
                 price: 12.00, 
                 icon: '🍕', 
                 badge: '🔥 Popular',
-                video: 'https://www.w3schools.com/html/mov_bbb.mp4'  // Video de respaldo
+                video: 'https://www.w3schools.com/html/mov_bbb.mp4',
+                gif: 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDZyYXhldmJ3aTB6Y3pibDF2b2Fpa2N5ZDBkeGZ3cHJ3N3NjbmJvOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9dg/v7VDS5pnEggs3kqhnl/giphy.gif',
+                bakingTime: 5000  // 5 segundos
             },
             { 
                 id: 2, 
@@ -1138,7 +1129,9 @@
                 price: 5.00, 
                 icon: '🍫', 
                 badge: '⭐ Más vendido',
-                video: 'https://www.w3schools.com/html/mov_bbb.mp4'
+                video: 'https://www.w3schools.com/html/mov_bbb.mp4',
+                gif: 'https://media.giphy.com/media/3o6Ztq6W2lFfYMV2kI/giphy.gif',
+                bakingTime: 6000
             },
             { 
                 id: 3, 
@@ -1147,7 +1140,9 @@
                 price: 4.00, 
                 icon: '🍪', 
                 badge: '🥇 Clásica',
-                video: 'https://www.w3schools.com/html/mov_bbb.mp4'
+                video: 'https://www.w3schools.com/html/mov_bbb.mp4',
+                gif: 'https://media.giphy.com/media/3o6Zt5KzGKbUYWmUMU/giphy.gif',
+                bakingTime: 4000
             },
             { 
                 id: 4, 
@@ -1156,7 +1151,9 @@
                 price: 6.00, 
                 icon: '🥖', 
                 badge: '🌾 Tradicional',
-                video: 'https://www.w3schools.com/html/mov_bbb.mp4'
+                video: 'https://www.w3schools.com/html/mov_bbb.mp4',
+                gif: 'https://media.giphy.com/media/l0IylOPCNkiqOgMyA/giphy.gif',
+                bakingTime: 7000
             },
             { 
                 id: 5, 
@@ -1165,7 +1162,9 @@
                 price: 3.50, 
                 icon: '🥐', 
                 badge: '🇫🇷 Premium',
-                video: 'https://www.w3schools.com/html/mov_bbb.mp4'
+                video: 'https://www.w3schools.com/html/mov_bbb.mp4',
+                gif: 'https://media.giphy.com/media/3o6Zt6qW2lFfYMV2kI/giphy.gif',
+                bakingTime: 5000
             }
         ];
 
@@ -1174,10 +1173,17 @@
         // ============================================================
         let cart = [];
         let currentProduct = 'pizza';
-        let videoElement = document.getElementById('oven-video');
-        let fallbackElement = document.getElementById('videoFallback');
-        let statusText = document.getElementById('statusText');
-        let toastContainer = document.getElementById('toastContainer');
+        let isBaking = false;
+        let bakingTimeout = null;
+        let productReady = false;
+        
+        const videoElement = document.getElementById('oven-video');
+        const gifElement = document.getElementById('oven-gif');
+        const statusText = document.getElementById('statusText');
+        const statusOverlay = document.getElementById('bakingStatus');
+        const addToCartBtn = document.getElementById('addToCartBtn');
+        const hornearAgainBtn = document.getElementById('hornearAgainBtn');
+        const toastContainer = document.getElementById('toastContainer');
         let toastTimeout = null;
 
         // ============================================================
@@ -1273,10 +1279,9 @@
         }
 
         // ============================================================
-        // TOAST NOTIFICATIONS (accesibles)
+        // TOAST
         // ============================================================
         function showToast(message, type = 'info') {
-            // Limpiar toast anterior
             if (toastTimeout) {
                 clearTimeout(toastTimeout);
                 const oldToast = toastContainer.querySelector('.toast');
@@ -1333,7 +1338,6 @@
                     </button>
                 `;
                 
-                // Soporte para teclado (Enter/Space)
                 card.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
@@ -1347,9 +1351,15 @@
         }
 
         // ============================================================
-        // CONTROL DEL VIDEO
+        // CONTROL DEL HORNO (VIDEO + GIF)
         // ============================================================
-        function loadProductVideo(productType) {
+        function startBaking(productType) {
+            // Limpiar timeout anterior
+            if (bakingTimeout) {
+                clearTimeout(bakingTimeout);
+                bakingTimeout = null;
+            }
+            
             const product = PRODUCTS.find(p => 
                 p.name.toLowerCase().includes(productType) || 
                 (productType === 'pizza' && p.id === 1) ||
@@ -1359,28 +1369,32 @@
                 (productType === 'croissant' && p.id === 5)
             );
             
-            if (product && product.video) {
-                // Ocultar fallback
-                fallbackElement.style.display = 'none';
-                videoElement.style.display = 'block';
-                
-                // Cargar video
-                videoElement.src = product.video;
-                videoElement.load();
-                
-                // Intentar reproducir
-                const playPromise = videoElement.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(() => {
-                        // Si falla, mostrar fallback
-                        showFallback();
-                    });
-                }
-                
-                statusText.textContent = `🎬 ${product.name} horneándose...`;
-            } else {
-                showFallback();
-            }
+            if (!product) return;
+            
+            // Resetear estado
+            isBaking = true;
+            productReady = false;
+            addToCartBtn.classList.remove('show');
+            hornearAgainBtn.classList.remove('show');
+            statusOverlay.classList.remove('done');
+            
+            // Mostrar video, ocultar GIF
+            videoElement.style.display = 'block';
+            gifElement.style.display = 'none';
+            
+            // Cargar y reproducir video
+            videoElement.src = product.video;
+            videoElement.load();
+            videoElement.play().catch(() => {
+                // Si falla, igual continuamos
+            });
+            
+            statusText.textContent = `🔥 ${product.name} horneándose...`;
+            
+            // Programar finalización del horneado
+            bakingTimeout = setTimeout(() => {
+                finishBaking(product);
+            }, product.bakingTime || 5000);
             
             // Actualizar botones activos
             document.querySelectorAll('.product-selector button').forEach(btn => {
@@ -1392,45 +1406,129 @@
             currentProduct = productType;
         }
 
-        function showFallback() {
+        function finishBaking(product) {
+            isBaking = false;
+            productReady = true;
+            
+            // Ocultar video, mostrar GIF
             videoElement.style.display = 'none';
-            fallbackElement.style.display = 'flex';
-            statusText.textContent = '⚠️ Video no disponible';
+            gifElement.style.display = 'block';
+            gifElement.src = product.gif;
+            
+            // Actualizar estado
+            statusText.textContent = `✅ ¡${product.name} lista!`;
+            statusOverlay.classList.add('done');
+            
+            // Mostrar botones de acción
+            addToCartBtn.classList.add('show');
+            hornearAgainBtn.classList.add('show');
+            
+            // Actualizar el texto del botón de agregar
+            addToCartBtn.innerHTML = `🛒 Agregar ${product.icon} al Carrito`;
+            
+            // Efecto de "listo"
+            showToast(`🍕 ¡${product.name} recién horneada!`, 'success');
         }
 
-        function retryVideo() {
-            fallbackElement.style.display = 'none';
+        function addCurrentProductToCart() {
+            if (!productReady) return;
+            
+            const product = PRODUCTS.find(p => 
+                p.name.toLowerCase().includes(currentProduct) || 
+                (currentProduct === 'pizza' && p.id === 1) ||
+                (currentProduct === 'brownie' && p.id === 2) ||
+                (currentProduct === 'galleta' && p.id === 3) ||
+                (currentProduct === 'pan' && p.id === 4) ||
+                (currentProduct === 'croissant' && p.id === 5)
+            );
+            
+            if (product) {
+                addToCart(product.id);
+                // Ocultar botón después de agregar
+                addToCartBtn.classList.remove('show');
+                showToast(`✅ ${product.name} agregado al carrito`, 'success');
+            }
+        }
+
+        function resetOven() {
+            // Limpiar timeout
+            if (bakingTimeout) {
+                clearTimeout(bakingTimeout);
+                bakingTimeout = null;
+            }
+            
+            // Resetear UI
+            productReady = false;
+            addToCartBtn.classList.remove('show');
+            hornearAgainBtn.classList.remove('show');
+            statusOverlay.classList.remove('done');
+            
+            // Mostrar video, ocultar GIF
             videoElement.style.display = 'block';
-            loadProductVideo(currentProduct);
+            gifElement.style.display = 'none';
+            
+            // Volver a cargar el video actual
+            const product = PRODUCTS.find(p => 
+                p.name.toLowerCase().includes(currentProduct) || 
+                (currentProduct === 'pizza' && p.id === 1) ||
+                (currentProduct === 'brownie' && p.id === 2) ||
+                (currentProduct === 'galleta' && p.id === 3) ||
+                (currentProduct === 'pan' && p.id === 4) ||
+                (currentProduct === 'croissant' && p.id === 5)
+            );
+            
+            if (product) {
+                videoElement.src = product.video;
+                videoElement.load();
+                videoElement.play().catch(() => {});
+                statusText.textContent = `🎬 ${product.name} listo para hornear`;
+            }
         }
 
         // ============================================================
         // INICIALIZACIÓN
         // ============================================================
         document.addEventListener('DOMContentLoaded', () => {
-            // Renderizar productos
             renderProducts();
             updateCartUI();
 
             // Cargar video inicial
-            setTimeout(() => loadProductVideo('pizza'), 300);
+            setTimeout(() => startBaking('pizza'), 500);
 
             // Selector de productos
             document.querySelectorAll('.product-selector button').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const product = btn.dataset.product;
-                    loadProductVideo(product);
+                    // Si hay un producto listo, resetear primero
+                    if (productReady) {
+                        resetOven();
+                        setTimeout(() => startBaking(product), 300);
+                    } else {
+                        startBaking(product);
+                    }
                 });
             });
 
-            // Botón "Ver Horneado"
+            // Botón "Ver Horneado" - reinicia el proceso
             document.getElementById('watchBakingBtn').addEventListener('click', () => {
-                loadProductVideo(currentProduct);
-                showToast('🎬 Reproduciendo proceso de horneado', 'info');
+                if (productReady) {
+                    resetOven();
+                    setTimeout(() => startBaking(currentProduct), 300);
+                } else if (!isBaking) {
+                    startBaking(currentProduct);
+                } else {
+                    showToast('⏳ Ya está horneando...', 'info');
+                }
             });
 
-            // Botón retry del fallback
-            document.getElementById('retryVideo').addEventListener('click', retryVideo);
+            // Botón "Agregar al Carrito"
+            addToCartBtn.addEventListener('click', addCurrentProductToCart);
+
+            // Botón "Hornear otro"
+            hornearAgainBtn.addEventListener('click', () => {
+                resetOven();
+                setTimeout(() => startBaking(currentProduct), 300);
+            });
 
             // Eventos del carrito
             const cartToggle = document.getElementById('cartToggle');
@@ -1440,52 +1538,26 @@
             cartToggle.addEventListener('click', () => {
                 const isOpen = cartOverlay.classList.toggle('open');
                 cartToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-                if (isOpen) {
-                    cartToggle.focus();
-                }
             });
 
             closeCart.addEventListener('click', () => {
                 cartOverlay.classList.remove('open');
                 cartToggle.setAttribute('aria-expanded', 'false');
-                cartToggle.focus();
             });
 
             document.getElementById('checkoutBtn').addEventListener('click', checkout);
 
-            // Cerrar carrito con Escape
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && cartOverlay.classList.contains('open')) {
                     cartOverlay.classList.remove('open');
                     cartToggle.setAttribute('aria-expanded', 'false');
-                    cartToggle.focus();
                 }
             });
 
-            // Cerrar carrito con clic fuera (solo en desktop)
-            document.addEventListener('click', (e) => {
-                if (cartOverlay.classList.contains('open')) {
-                    const isClickInside = cartOverlay.contains(e.target);
-                    const isClickOnToggle = cartToggle.contains(e.target);
-                    if (!isClickInside && !isClickOnToggle) {
-                        cartOverlay.classList.remove('open');
-                        cartToggle.setAttribute('aria-expanded', 'false');
-                    }
-                }
-            });
-
-            // Scroll effect para header
+            // Scroll effect
             window.addEventListener('scroll', () => {
                 document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
             });
-
-            // Soporte para prefers-reduced-motion
-            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-            if (prefersReducedMotion.matches) {
-                document.querySelectorAll('.product-card, .btn-primary').forEach(el => {
-                    el.style.transition = 'none';
-                });
-            }
         });
     </script>
 
