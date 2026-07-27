@@ -89,7 +89,7 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* ===== HERO ===== */
+        /* ===== HERO CON FONDO 3D ===== */
         .hero {
             height: 100vh;
             display: flex;
@@ -99,23 +99,37 @@
             text-align: center;
             padding: 0 20px;
             position: relative;
-            background: radial-gradient(ellipse at center, #1a1a1a 0%, #0B0B0B 70%);
+            overflow: hidden;
+        }
+        /* El canvas de Three.js ocupará todo el fondo */
+        #hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
         }
         .hero h1 {
             font-family: 'Playfair Display', serif;
             font-size: 72px;
             font-weight: 700;
             color: #D4AF37;
-            text-shadow: 0 0 60px rgba(212, 175, 55, 0.2);
+            text-shadow: 0 0 60px rgba(212, 175, 55, 0.3);
             margin-bottom: 20px;
             animation: fadeUp 1.2s ease;
         }
         .hero p {
             font-size: 18px;
             font-weight: 300;
-            color: #B0B0B0;
+            color: #F8F4F0;
             max-width: 500px;
             margin-bottom: 40px;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.5);
             animation: fadeUp 1.4s ease;
         }
         .btn-gold {
@@ -143,11 +157,22 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
+        /* ===== EFECTO PARALLAX EN SECCIONES ===== */
+        .section-divider {
+            height: 150px;
+            background: linear-gradient(180deg, transparent 0%, #0B0B0B 100%);
+            position: relative;
+            z-index: 2;
+        }
+
         /* ===== SECCIÓN PRODUCTOS ===== */
         .products-section {
             padding: 80px 50px;
             max-width: 1300px;
             margin: 0 auto;
+            position: relative;
+            z-index: 3;
+            background: radial-gradient(ellipse at 30% 20%, #1a1208 0%, #0B0B0B 70%);
         }
         .section-title {
             font-family: 'Playfair Display', serif;
@@ -171,13 +196,14 @@
         }
 
         .product-card {
-            background: #F8F4F0;
+            background: rgba(248, 244, 240, 0.05);
+            backdrop-filter: blur(10px);
             border-radius: 24px;
             padding: 30px 20px 25px;
             text-align: center;
-            color: #0B0B0B;
+            color: #F8F4F0;
             transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            border: 1px solid transparent;
+            border: 1px solid rgba(212, 175, 55, 0.1);
             position: relative;
             overflow: hidden;
         }
@@ -195,6 +221,7 @@
         .product-card:hover {
             transform: translateY(-10px) scale(1.01);
             box-shadow: 0 30px 50px rgba(212, 175, 55, 0.15);
+            border-color: #D4AF37;
         }
 
         .product-card .canvas-container {
@@ -203,7 +230,7 @@
             margin-bottom: 15px;
             border-radius: 16px;
             overflow: hidden;
-            background: #1a1a1a;
+            background: rgba(26, 26, 26, 0.8);
             cursor: grab;
         }
 
@@ -211,9 +238,10 @@
             font-size: 22px;
             font-weight: 600;
             margin-bottom: 4px;
+            color: #D4AF37;
         }
         .product-card .desc {
-            color: #555;
+            color: #B0B0B0;
             font-size: 14px;
             font-weight: 300;
             margin-bottom: 12px;
@@ -227,7 +255,7 @@
         .btn-add {
             background: transparent;
             border: 2px solid #D4AF37;
-            color: #0B0B0B;
+            color: #F8F4F0;
             padding: 10px 32px;
             border-radius: 40px;
             font-weight: 600;
@@ -240,6 +268,49 @@
             background: #D4AF37;
             color: #0B0B0B;
             box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+        }
+
+        /* ===== SECCIÓN "EL HORNO" (fondo narrativo) ===== */
+        .oven-section {
+            padding: 100px 50px;
+            background: radial-gradient(ellipse at 70% 50%, #1a0f06 0%, #0B0B0B 70%);
+            position: relative;
+            overflow: hidden;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+        .oven-section .oven-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.6;
+        }
+        .oven-content {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .oven-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            color: #D4AF37;
+            margin-bottom: 20px;
+            text-shadow: 0 0 40px rgba(212, 175, 55, 0.2);
+        }
+        .oven-content p {
+            color: #B0B0B0;
+            font-size: 18px;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+        .oven-content .highlight {
+            color: #D4AF37;
+            font-weight: 500;
         }
 
         /* ===== CARRITO LATERAL ===== */
@@ -348,6 +419,8 @@
             color: #B0B0B0;
             font-size: 14px;
             letter-spacing: 1px;
+            position: relative;
+            z-index: 3;
         }
         .footer strong { color: #D4AF37; font-weight: 400; }
 
@@ -358,6 +431,8 @@
             .hero h1 { font-size: 40px; }
             .products-section { padding: 40px 20px; }
             .cart-overlay { width: 100%; right: -100%; }
+            .oven-section { padding: 60px 20px; }
+            .oven-content h2 { font-size: 32px; }
         }
     </style>
 </head>
@@ -368,8 +443,8 @@
         <div class="logo">Dulce<span>3D</span></div>
         <nav class="nav">
             <a href="#">Inicio</a>
-            <a href="#">Productos</a>
-            <a href="#">Nosotros</a>
+            <a href="#products">Productos</a>
+            <a href="#horno">Nuestro Horno</a>
             <a href="#">Contacto</a>
         </nav>
         <div class="cart-icon" id="cartToggle">
@@ -378,14 +453,22 @@
         </div>
     </header>
 
-    <!-- ===== HERO ===== -->
-    <section class="hero">
-        <h1>Placer Horneado en 3D</h1>
-        <p>Brownies, tortas y galletas con chispas de chocolate belga. Una experiencia visual y gastronómica única.</p>
-        <button class="btn-gold" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
-            Explorar Menú
-        </button>
+    <!-- ===== HERO CON FONDO 3D ===== -->
+    <section class="hero" id="inicio">
+        <!-- Canvas para Three.js (fondo) -->
+        <div id="hero-canvas"></div>
+        <!-- Contenido sobre el fondo -->
+        <div class="hero-content">
+            <h1>Placer Horneado en 3D</h1>
+            <p>Brownies, tortas y galletas con chispas de chocolate belga. Una experiencia visual y gastronómica única.</p>
+            <button class="btn-gold" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+                Explorar Menú
+            </button>
+        </div>
     </section>
+
+    <!-- ===== DIVISOR ===== -->
+    <div class="section-divider"></div>
 
     <!-- ===== PRODUCTOS 3D ===== -->
     <section class="products-section" id="products">
@@ -394,6 +477,21 @@
 
         <div class="grid-3d" id="productGrid">
             <!-- Los productos se inyectan con JS -->
+        </div>
+    </section>
+
+    <!-- ===== SECCIÓN "EL HORNO" (fondo narrativo 3D) ===== -->
+    <section class="oven-section" id="horno">
+        <div class="oven-canvas" id="oven-canvas"></div>
+        <div class="oven-content">
+            <h2>🔥 El arte del horneado</h2>
+            <p>
+                Cada una de nuestras creaciones nace en un <span class="highlight">horno de piedra</span>, 
+                donde la temperatura y el tiempo se combinan para lograr la textura perfecta. 
+                <br><br>
+                Usamos <span class="highlight">chocolate belga 70%</span> y mantequilla francesa 
+                para que cada bocado sea una experiencia inolvidable.
+            </p>
         </div>
     </section>
 
@@ -454,7 +552,6 @@
         // ============================================================
         let cart = [];
 
-        // Función para obtener el carrito desde el servidor
         async function fetchCart() {
             try {
                 const response = await fetch('/api/cart');
@@ -468,7 +565,6 @@
             }
         }
 
-        // Función para agregar al carrito vía API
         async function addToCart(productId) {
             const product = PRODUCTS.find(p => p.id === productId);
             if (!product) return;
@@ -496,7 +592,6 @@
             }
         }
 
-        // Función para cambiar cantidad
         async function changeQty(productId, delta) {
             const item = cart.find(i => i.id === productId);
             if (!item) return;
@@ -523,7 +618,6 @@
             }
         }
 
-        // Función para eliminar del carrito
         async function removeFromCart(productId) {
             try {
                 const response = await fetch(`/api/cart/remove/${productId}`, {
@@ -540,24 +634,6 @@
             }
         }
 
-        // Función para vaciar el carrito
-        async function clearCart() {
-            try {
-                const response = await fetch('/api/cart/clear', {
-                    method: 'DELETE'
-                });
-                const result = await response.json();
-                if (result.success) {
-                    cart = result.data;
-                    updateCartUI();
-                    showToast('🗑️ Carrito vaciado');
-                }
-            } catch (error) {
-                console.error('Error al vaciar el carrito:', error);
-            }
-        }
-
-        // Función para checkout
         async function checkout() {
             if (cart.length === 0) {
                 showToast('🛒 Tu carrito está vacío');
@@ -652,7 +728,360 @@
         }
 
         // ============================================================
-        // 5. THREE.JS - CREAR MODELOS 3D
+        // 5. THREE.JS - FONDO DEL HERO (Torta girando con efecto horno)
+        // ============================================================
+        function createHeroBackground() {
+            const container = document.getElementById('hero-canvas');
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0B0B0B);
+
+            const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+            camera.position.set(0, 2, 8);
+            camera.lookAt(0, 0, 0);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            container.appendChild(renderer.domElement);
+
+            // Luces dramáticas (efecto horno)
+            const ambient = new THREE.AmbientLight(0xff8844, 0.3);
+            scene.add(ambient);
+
+            const keyLight = new THREE.DirectionalLight(0xff6633, 2.0);
+            keyLight.position.set(2, 4, 5);
+            keyLight.castShadow = true;
+            scene.add(keyLight);
+
+            const fillLight = new THREE.DirectionalLight(0xffaa44, 0.6);
+            fillLight.position.set(-3, 2, 3);
+            scene.add(fillLight);
+
+            const backLight = new THREE.DirectionalLight(0xff4400, 0.8);
+            backLight.position.set(0, 0, -5);
+            scene.add(backLight);
+
+            // Partículas de calor (chispas de fuego/horno)
+            const particleCount = 500;
+            const particlesGeo = new THREE.BufferGeometry();
+            const particlePos = new Float32Array(particleCount * 3);
+            for (let i = 0; i < particleCount * 3; i++) {
+                particlePos[i] = (Math.random() - 0.5) * 20;
+            }
+            particlesGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
+            const particleMat = new THREE.PointsMaterial({
+                color: 0xff6633,
+                size: 0.08,
+                transparent: true,
+                opacity: 0.6,
+                blending: THREE.AdditiveBlending
+            });
+            const particles = new THREE.Points(particlesGeo, particleMat);
+            scene.add(particles);
+
+            // Crear la torta (grupo de cilindros - estilo horno)
+            const cakeGroup = new THREE.Group();
+            
+            // Base de la torta
+            const baseMat = new THREE.MeshStandardMaterial({ 
+                color: 0x2c1810, 
+                roughness: 0.7,
+                metalness: 0.1,
+                emissive: new THREE.Color(0x1a0a05),
+                emissiveIntensity: 0.1
+            });
+            const base = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 0.6, 32), baseMat);
+            base.position.y = 0.3;
+            base.castShadow = true;
+            cakeGroup.add(base);
+
+            // Capa de crema dorada
+            const creamMat = new THREE.MeshStandardMaterial({ 
+                color: 0xD4AF37, 
+                roughness: 0.3, 
+                metalness: 0.4,
+                emissive: new THREE.Color(0xD4AF37),
+                emissiveIntensity: 0.05
+            });
+            const cream1 = new THREE.Mesh(new THREE.CylinderGeometry(1.4, 1.4, 0.15, 32), creamMat);
+            cream1.position.y = 0.7;
+            cakeGroup.add(cream1);
+
+            // Segunda capa
+            const mid = new THREE.Mesh(new THREE.CylinderGeometry(1.3, 1.3, 0.5, 32), baseMat);
+            mid.position.y = 1.0;
+            mid.castShadow = true;
+            cakeGroup.add(mid);
+
+            const cream2 = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 0.15, 32), creamMat);
+            cream2.position.y = 1.3;
+            cakeGroup.add(cream2);
+
+            // Tapa superior
+            const top = new THREE.Mesh(new THREE.CylinderGeometry(1.1, 1.1, 0.5, 32), baseMat);
+            top.position.y = 1.6;
+            top.castShadow = true;
+            cakeGroup.add(top);
+
+            // Decoraciones doradas (chispas de "calor")
+            for (let i = 0; i < 20; i++) {
+                const deco = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.08 + Math.random() * 0.06, 6, 6),
+                    new THREE.MeshStandardMaterial({ 
+                        color: 0xD4AF37, 
+                        emissive: 0xff4400,
+                        emissiveIntensity: 0.1 + Math.random() * 0.2
+                    })
+                );
+                const angle = Math.random() * Math.PI * 2;
+                const rad = 0.6 + Math.random() * 0.5;
+                deco.position.set(
+                    Math.cos(angle) * rad,
+                    1.9 + Math.random() * 0.2,
+                    Math.sin(angle) * rad
+                );
+                cakeGroup.add(deco);
+            }
+
+            // "Llama" o resplandor encima de la torta
+            const glowGeo = new THREE.SphereGeometry(0.2, 8, 8);
+            const glowMat = new THREE.MeshStandardMaterial({
+                color: 0xff4400,
+                emissive: 0xff4400,
+                emissiveIntensity: 2,
+                transparent: true,
+                opacity: 0.3
+            });
+            const glow = new THREE.Mesh(glowGeo, glowMat);
+            glow.position.set(0, 2.4, 0);
+            cakeGroup.add(glow);
+
+            scene.add(cakeGroup);
+
+            // Efecto de "horno" - anillo de luz cálida
+            const ringGeo = new THREE.RingGeometry(2.5, 3.5, 64);
+            const ringMat = new THREE.MeshBasicMaterial({
+                color: 0xff4400,
+                transparent: true,
+                opacity: 0.05,
+                side: THREE.DoubleSide
+            });
+            const ring = new THREE.Mesh(ringGeo, ringMat);
+            ring.rotation.x = -Math.PI / 2;
+            ring.position.y = -0.5;
+            scene.add(ring);
+
+            // Controles
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 0.8;
+            controls.enableZoom = false;
+            controls.enablePan = false;
+            controls.target.set(0, 0.8, 0);
+            controls.update();
+
+            // Animación
+            let time = 0;
+            function animate() {
+                requestAnimationFrame(animate);
+                time += 0.01;
+
+                // Mover partículas (efecto de calor ascendente)
+                const positions = particles.geometry.attributes.position.array;
+                for (let i = 0; i < positions.length; i += 3) {
+                    positions[i + 1] += 0.01;
+                    if (positions[i + 1] > 5) {
+                        positions[i + 1] = -5;
+                        positions[i] = (Math.random() - 0.5) * 20;
+                        positions[i + 2] = (Math.random() - 0.5) * 20;
+                    }
+                }
+                particles.geometry.attributes.position.needsUpdate = true;
+
+                // Animar el resplandor (pulsación)
+                glow.scale.setScalar(1 + Math.sin(time * 2) * 0.3);
+                glowMat.opacity = 0.2 + Math.sin(time * 3) * 0.15;
+
+                // Animar la intensidad de la luz
+                keyLight.intensity = 1.8 + Math.sin(time * 1.5) * 0.3;
+
+                controls.update();
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Resize
+            window.addEventListener('resize', () => {
+                const w = window.innerWidth;
+                const h = window.innerHeight;
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+                renderer.setSize(w, h);
+            });
+        }
+
+        // ============================================================
+        // 6. THREE.JS - FONDO DEL HORNO (Horno 3D)
+        // ============================================================
+        function createOvenBackground() {
+            const container = document.getElementById('oven-canvas');
+            const width = container.clientWidth || window.innerWidth;
+            const height = container.clientHeight || 400;
+
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0a0a);
+
+            const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
+            camera.position.set(0, 1.5, 6);
+            camera.lookAt(0, 0, 0);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.shadowMap.enabled = true;
+            container.appendChild(renderer.domElement);
+
+            // Luces
+            const ambient = new THREE.AmbientLight(0x333333, 0.5);
+            scene.add(ambient);
+
+            const mainLight = new THREE.DirectionalLight(0xff8844, 1.5);
+            mainLight.position.set(3, 4, 4);
+            mainLight.castShadow = true;
+            scene.add(mainLight);
+
+            const fillLight = new THREE.DirectionalLight(0x4488ff, 0.3);
+            fillLight.position.set(-3, 0, 2);
+            scene.add(fillLight);
+
+            // Crear un horno simple (caja con puerta abierta)
+            const ovenGroup = new THREE.Group();
+
+            // Cuerpo del horno
+            const bodyMat = new THREE.MeshStandardMaterial({ 
+                color: 0x2a2a2a, 
+                roughness: 0.4, 
+                metalness: 0.7 
+            });
+            const body = new THREE.Mesh(new THREE.BoxGeometry(3.5, 2.5, 2.5), bodyMat);
+            body.position.y = 1.25;
+            body.castShadow = true;
+            ovenGroup.add(body);
+
+            // Puerta del horno (abierta, simulando calor)
+            const doorMat = new THREE.MeshStandardMaterial({ 
+                color: 0x1a1a1a, 
+                roughness: 0.3, 
+                metalness: 0.8,
+                transparent: true,
+                opacity: 0.5
+            });
+            const door = new THREE.Mesh(new THREE.BoxGeometry(2.8, 1.8, 0.1), doorMat);
+            door.position.set(0, 1.3, 1.6);
+            door.rotation.y = 0.5;
+            ovenGroup.add(door);
+
+            // Luz interior (calor)
+            const interiorLight = new THREE.Mesh(
+                new THREE.PlaneGeometry(2.5, 1.5),
+                new THREE.MeshBasicMaterial({ 
+                    color: 0xff4400, 
+                    transparent: true, 
+                    opacity: 0.3,
+                    side: THREE.DoubleSide
+                })
+            );
+            interiorLight.position.set(0, 1.3, 1.3);
+            ovenGroup.add(interiorLight);
+
+            // Parrilla interior
+            const grillMat = new THREE.MeshStandardMaterial({ 
+                color: 0x555555, 
+                roughness: 0.6, 
+                metalness: 0.9 
+            });
+            for (let i = -0.8; i <= 0.8; i += 0.4) {
+                const bar = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.05, 1.8), grillMat);
+                bar.position.set(i, 0.5, 1.3);
+                ovenGroup.add(bar);
+            }
+
+            // "Llamas" dentro del horno (partículas pequeñas)
+            const flameCount = 100;
+            const flameGeo = new THREE.BufferGeometry();
+            const flamePos = new Float32Array(flameCount * 3);
+            for (let i = 0; i < flameCount * 3; i++) {
+                flamePos[i] = (Math.random() - 0.5) * 2;
+                if (i % 3 === 1) flamePos[i] = Math.random() * 1.5 + 0.3;
+                if (i % 3 === 2) flamePos[i] += 1.3;
+            }
+            flameGeo.setAttribute('position', new THREE.BufferAttribute(flamePos, 3));
+            const flameMat = new THREE.PointsMaterial({
+                color: 0xff6633,
+                size: 0.06,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending
+            });
+            const flames = new THREE.Points(flameGeo, flameMat);
+            ovenGroup.add(flames);
+
+            scene.add(ovenGroup);
+
+            // Controles
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 0.3;
+            controls.enableZoom = false;
+            controls.enablePan = false;
+            controls.target.set(0, 1.3, 0);
+            controls.update();
+
+            // Animación
+            function animate() {
+                requestAnimationFrame(animate);
+
+                // Animar las llamas
+                const positions = flames.geometry.attributes.position.array;
+                for (let i = 0; i < positions.length; i += 3) {
+                    positions[i + 1] += 0.005;
+                    if (positions[i + 1] > 1.8) {
+                        positions[i + 1] = 0.3;
+                        positions[i] = (Math.random() - 0.5) * 2;
+                        positions[i + 2] = (Math.random() - 0.5) * 2 + 1.3;
+                    }
+                }
+                flames.geometry.attributes.position.needsUpdate = true;
+
+                // Pulsar la luz interior
+                interiorLight.material.opacity = 0.2 + Math.sin(Date.now() * 0.003) * 0.15;
+
+                controls.update();
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Resize
+            window.addEventListener('resize', () => {
+                const w = container.clientWidth || window.innerWidth;
+                const h = container.clientHeight || 400;
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+                renderer.setSize(w, h);
+            });
+        }
+
+        // ============================================================
+        // 7. THREE.JS - MODELOS DE PRODUCTOS
         // ============================================================
         function create3DModel(container, product) {
             const width = container.clientWidth || 300;
@@ -672,7 +1101,6 @@
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             container.appendChild(renderer.domElement);
 
-            // Luces
             const ambient = new THREE.AmbientLight(0x404060);
             scene.add(ambient);
 
@@ -689,7 +1117,6 @@
             rimLight.position.set(0, 0, -5);
             scene.add(rimLight);
 
-            // --- GEOMETRÍA SEGÚN PRODUCTO ---
             let mesh;
             const color = product.color;
             const secondary = product.secondary;
@@ -782,7 +1209,6 @@
 
             scene.add(mesh);
 
-            // Suelo reflejante
             const floorGeo = new THREE.PlaneGeometry(6, 6);
             const floorMat = new THREE.MeshStandardMaterial({ 
                 color: 0x0a0a0a, 
@@ -797,7 +1223,6 @@
             floor.receiveShadow = true;
             scene.add(floor);
 
-            // OrbitControls
             const controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
@@ -835,7 +1260,7 @@
         }
 
         // ============================================================
-        // 6. RENDERIZAR PRODUCTOS EN GRID
+        // 8. RENDERIZAR PRODUCTOS
         // ============================================================
         function renderProducts() {
             const grid = document.getElementById('productGrid');
@@ -859,12 +1284,18 @@
         }
 
         // ============================================================
-        // 7. INICIALIZACIÓN
+        // 9. INICIALIZACIÓN
         // ============================================================
         document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar fondos 3D
+            createHeroBackground();
+            createOvenBackground();
+
+            // Inicializar productos y carrito
             fetchCart();
             renderProducts();
 
+            // Eventos del carrito
             document.getElementById('cartToggle').addEventListener('click', () => {
                 document.getElementById('cartOverlay').classList.toggle('open');
             });
