@@ -8,9 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     
     <style>
-        /* ============================================================
-           RESET Y VARIABLES
-           ============================================================ */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
@@ -20,7 +17,6 @@
             --text-secondary: #5A4A3A;
             --gold: #D4AF37;
             --gold-light: #F5E6C8;
-            --gold-hover: #C4A030;
             --shadow-sm: 0 2px 20px rgba(0,0,0,0.02);
             --shadow-md: 0 8px 40px rgba(0,0,0,0.04);
             --shadow-lg: 0 20px 60px rgba(0,0,0,0.06);
@@ -41,9 +37,7 @@
         ::-webkit-scrollbar-track { background: var(--bg-primary); }
         ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
 
-        /* ============================================================
-           HEADER - ESTILO WEARE (limpió, centrado en marca)
-           ============================================================ */
+        /* HEADER */
         .header {
             position: fixed;
             top: 0; left: 0; width: 100%;
@@ -57,9 +51,7 @@
             border-bottom: 1px solid rgba(212, 175, 55, 0.08);
             transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        .header.scrolled {
-            box-shadow: 0 4px 30px rgba(0,0,0,0.03);
-        }
+        .header.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.03); }
         .logo {
             font-family: 'Playfair Display', serif;
             font-size: 28px;
@@ -85,14 +77,8 @@
             border-radius: 50px;
             letter-spacing: 0.2px;
         }
-        .nav a:hover {
-            color: var(--text-primary);
-            background: rgba(212, 175, 55, 0.06);
-        }
-        .nav a.active {
-            color: var(--gold);
-            background: rgba(212, 175, 55, 0.08);
-        }
+        .nav a:hover { color: var(--text-primary); background: rgba(212, 175, 55, 0.06); }
+        .nav a.active { color: var(--gold); background: rgba(212, 175, 55, 0.08); }
 
         .header-actions {
             display: flex;
@@ -126,9 +112,7 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* ============================================================
-           HERO - ESTILO WEARE (storytelling visual, producto protagonista)
-           ============================================================ */
+        /* HERO */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -190,11 +174,7 @@
             margin-bottom: 18px;
             letter-spacing: -1px;
         }
-        .hero h1 span {
-            color: var(--gold);
-            font-style: italic;
-            position: relative;
-        }
+        .hero h1 span { color: var(--gold); font-style: italic; position: relative; }
         .hero h1 span::after {
             content: '';
             position: absolute;
@@ -215,7 +195,6 @@
             max-width: 440px;
         }
 
-        /* Selector de productos */
         .product-selector {
             display: flex;
             gap: 8px;
@@ -289,24 +268,23 @@
             background: rgba(212, 175, 55, 0.04);
         }
 
-        /* ===== HORNO 3D ===== */
+        /* HORNO CON VIDEO */
         .oven-container {
             flex: 1;
             height: 580px;
             position: relative;
             z-index: 1;
         }
-        #oven-canvas {
+        #oven-video {
             width: 100%;
             height: 100%;
             border-radius: var(--radius-lg);
             overflow: hidden;
             box-shadow: var(--shadow-lg);
-            background: #F8F4EF;
-            cursor: pointer;
+            background: #1A120E;
+            object-fit: cover;
         }
-
-        .baking-status {
+        .oven-overlay {
             position: absolute;
             bottom: 24px;
             left: 50%;
@@ -327,7 +305,7 @@
             font-family: 'Inter', sans-serif;
             letter-spacing: 0.2px;
         }
-        .baking-status .dot {
+        .oven-overlay .dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
@@ -335,9 +313,7 @@
             animation: pulse 1.5s infinite;
         }
 
-        /* ============================================================
-           SECCIÓN PRODUCTOS - ESTILO WEARE (grid limpio, premium)
-           ============================================================ */
+        /* SECCIÓN PRODUCTOS */
         .products-section {
             padding: 80px 50px 100px;
             max-width: 1300px;
@@ -352,9 +328,7 @@
             flex-wrap: wrap;
             gap: 20px;
         }
-        .section-header-left {
-            max-width: 600px;
-        }
+        .section-header-left { max-width: 600px; }
         .section-tag {
             display: inline-block;
             color: var(--gold);
@@ -377,17 +351,6 @@
             font-size: 16px;
             margin-top: 6px;
         }
-        .section-link {
-            color: var(--gold);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 14px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: 0.3s;
-        }
-        .section-link:hover { gap: 10px; }
 
         .grid-products {
             display: grid;
@@ -420,14 +383,8 @@
             box-shadow: var(--shadow-md);
             border-color: rgba(212, 175, 55, 0.1);
         }
-        .product-card:hover::after {
-            border-color: var(--gold);
-        }
-        .product-card .icon {
-            font-size: 48px;
-            margin-bottom: 12px;
-            display: block;
-        }
+        .product-card:hover::after { border-color: var(--gold); }
+        .product-card .icon { font-size: 48px; margin-bottom: 12px; display: block; }
         .product-card .badge {
             display: inline-block;
             font-size: 10px;
@@ -471,14 +428,9 @@
             font-family: 'Inter', sans-serif;
             font-size: 13px;
         }
-        .btn-add:hover {
-            background: var(--gold);
-            transform: scale(1.02);
-        }
+        .btn-add:hover { background: var(--gold); transform: scale(1.02); }
 
-        /* ============================================================
-           CARRITO
-           ============================================================ */
+        /* CARRITO */
         .cart-overlay {
             position: fixed;
             top: 0; right: -480px;
@@ -571,9 +523,7 @@
             font-weight: 300;
         }
 
-        /* ============================================================
-           FOOTER
-           ============================================================ */
+        /* FOOTER */
         .footer {
             text-align: center;
             padding: 40px 20px;
@@ -599,27 +549,24 @@
         }
         .footer-links a:hover { color: var(--gold); }
 
-        /* ============================================================
-           RESPONSIVE
-           ============================================================ */
+        /* RESPONSIVE */
         @media (max-width: 1024px) {
             .hero { flex-direction: column; padding: 140px 30px 60px; text-align: center; }
             .hero-content { max-width: 100%; }
             .hero p { max-width: 100%; margin-left: auto; margin-right: auto; }
             .product-selector { justify-content: center; }
             .hero-actions { justify-content: center; }
-            .oven-container { width: 100%; height: 450px; margin-top: 30px; }
+            .oven-container { width: 100%; height: 400px; margin-top: 30px; }
             .section-header { flex-direction: column; align-items: flex-start; }
         }
         @media (max-width: 768px) {
             .header { padding: 14px 20px; }
             .nav { display: none; }
             .hero h1 { font-size: 38px; }
-            .oven-container { height: 320px; }
+            .oven-container { height: 280px; }
             .products-section { padding: 50px 20px 70px; }
             .cart-overlay { width: 100%; right: -100%; padding: 24px 20px; }
             .product-selector button { font-size: 12px; padding: 8px 16px; }
-            .baking-status { font-size: 12px; padding: 10px 18px; bottom: 12px; }
             .section-title { font-size: 30px; }
             .grid-products { grid-template-columns: 1fr 1fr; gap: 16px; }
         }
@@ -629,29 +576,20 @@
             .btn-primary, .btn-secondary { padding: 12px 24px; font-size: 13px; }
         }
 
-        /* ============================================================
-           ANIMACIONES GLOBALES
-           ============================================================ */
         @keyframes fadeUp {
             0% { opacity: 0; transform: translateY(20px); }
             100% { opacity: 1; transform: translateY(0); }
-        }
-        .fade-up {
-            animation: fadeUp 0.6s ease forwards;
         }
     </style>
 </head>
 <body>
 
-    <!-- ============================================================
-    HEADER
-    ============================================================ -->
+    <!-- HEADER -->
     <header class="header" id="header">
         <a href="#inicio" class="logo">Dulce<span>3D</span></a>
         <nav class="nav">
             <a href="#inicio" class="active">Inicio</a>
             <a href="#productos">Productos</a>
-            <a href="#horno">El Horno</a>
         </nav>
         <div class="header-actions">
             <button class="cart-icon" id="cartToggle" aria-label="Carrito">
@@ -661,19 +599,17 @@
         </div>
     </header>
 
-    <!-- ============================================================
-    HERO
-    ============================================================ -->
+    <!-- HERO -->
     <section class="hero" id="inicio">
         <div class="hero-content">
             <div class="hero-badge">
                 <span class="dot"></span>
-                Horneado en Vivo
+                🎬 Horneado en Vivo
             </div>
             <h1>El <span>horno</span> mágico<br>de la panadería</h1>
             <p>
-                Selecciona qué quieres hornear y mira cómo la masa se transforma
-                en tu producto favorito. Una experiencia 3D única.
+                Selecciona un producto y mira el proceso de horneado en tiempo real.
+                ¡Cada video muestra el arte de la panadería!
             </p>
             <div class="product-selector" id="productSelector">
                 <button data-product="pizza" class="active">🍕 Pizza</button>
@@ -683,24 +619,24 @@
                 <button data-product="croissant">🥐 Croissant</button>
             </div>
             <div class="hero-actions">
-                <button class="btn-primary" id="toggleDoorBtn">🔓 Abrir Horno</button>
+                <button class="btn-primary" id="watchBakingBtn">▶ Ver Horneado</button>
                 <button class="btn-secondary" onclick="document.getElementById('productos').scrollIntoView({behavior:'smooth'})">
                     Ver productos →
                 </button>
             </div>
         </div>
         <div class="oven-container">
-            <div id="oven-canvas"></div>
-            <div class="baking-status" id="bakingStatus">
+            <video id="oven-video" autoplay loop muted playsinline>
+                <source src="" type="video/mp4">
+            </video>
+            <div class="oven-overlay" id="bakingStatus">
                 <span class="dot"></span>
-                <span id="statusText">Listo para hornear</span>
+                <span id="statusText">🎬 Selecciona un producto</span>
             </div>
         </div>
     </section>
 
-    <!-- ============================================================
-    PRODUCTOS
-    ============================================================ -->
+    <!-- PRODUCTOS -->
     <section class="products-section" id="productos">
         <div class="section-header">
             <div class="section-header-left">
@@ -708,16 +644,14 @@
                 <h2 class="section-title">Productos <span>horneados</span></h2>
                 <p class="section-sub">Cada uno con su historia, su textura y su sabor único</p>
             </div>
-            <a href="#inicio" class="section-link">Volver al horno →</a>
+            <a href="#inicio" class="section-link" style="color:var(--gold);text-decoration:none;font-weight:500;">← Volver al horno</a>
         </div>
         <div class="grid-products" id="productGrid">
             <!-- Generado por JS -->
         </div>
     </section>
 
-    <!-- ============================================================
-    CARRITO
-    ============================================================ -->
+    <!-- CARRITO -->
     <div class="cart-overlay" id="cartOverlay">
         <button class="close-cart" id="closeCart">✕</button>
         <h2>Tu <span>pedido</span></h2>
@@ -726,51 +660,71 @@
         <button class="btn-checkout" id="checkoutBtn">Proceder al Pago</button>
     </div>
 
-    <!-- ============================================================
-    FOOTER
-    ============================================================ -->
+    <!-- FOOTER -->
     <footer class="footer">
         <div class="footer-links">
             <a href="#inicio">Inicio</a>
             <a href="#productos">Productos</a>
-            <a href="#horno">El Horno</a>
         </div>
         <p>Hecho con <strong>❤️</strong> y <strong>🥖</strong> · 2026</p>
     </footer>
 
-    <!-- ============================================================
-    THREE.JS
-    ============================================================ -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-
-    <!-- ============================================================
-    CÓDIGO PRINCIPAL
-    ============================================================ -->
     <script>
         // ============================================================
-        // DATOS DE PRODUCTOS
+        // DATOS DE PRODUCTOS CON VIDEOS
         // ============================================================
         const PRODUCTS = [
-            { id: 1, name: 'Pizza Margherita', desc: 'Masa artesanal, tomate y mozzarella', price: 12.00, icon: '🍕', badge: '🔥 Popular' },
-            { id: 2, name: 'Brownie Supreme', desc: 'Chocolate belga 70% con nueces', price: 5.00, icon: '🍫', badge: '⭐ Más vendido' },
-            { id: 3, name: 'Galleta Crisp', desc: 'Chispas de chocolate y sal marina', price: 4.00, icon: '🍪', badge: '🥇 Clásica' },
-            { id: 4, name: 'Pan Artesanal', desc: 'Masa madre, crujiente y esponjoso', price: 6.00, icon: '🥖', badge: '🌾 Tradicional' },
-            { id: 5, name: 'Croissant de Mantequilla', desc: 'Hojaldre francés, puro sabor', price: 3.50, icon: '🥐', badge: '🇫🇷 Premium' }
+            { 
+                id: 1, 
+                name: 'Pizza Margherita', 
+                desc: 'Masa artesanal, tomate y mozzarella', 
+                price: 12.00, 
+                icon: '🍕', 
+                badge: '🔥 Popular',
+                video: 'https://cdn.pixabay.com/video/2020/05/21/41333-425066429_large.mp4'
+            },
+            { 
+                id: 2, 
+                name: 'Brownie Supreme', 
+                desc: 'Chocolate belga 70% con nueces', 
+                price: 5.00, 
+                icon: '🍫', 
+                badge: '⭐ Más vendido',
+                video: 'https://cdn.pixabay.com/video/2023/09/13/179211-864622753_large.mp4'
+            },
+            { 
+                id: 3, 
+                name: 'Galleta Crisp', 
+                desc: 'Chispas de chocolate y sal marina', 
+                price: 4.00, 
+                icon: '🍪', 
+                badge: '🥇 Clásica',
+                video: 'https://cdn.pixabay.com/video/2020/06/05/42093-430908826_large.mp4'
+            },
+            { 
+                id: 4, 
+                name: 'Pan Artesanal', 
+                desc: 'Masa madre, crujiente y esponjoso', 
+                price: 6.00, 
+                icon: '🥖', 
+                badge: '🌾 Tradicional',
+                video: 'https://cdn.pixabay.com/video/2019/11/18/28817-377100652_large.mp4'
+            },
+            { 
+                id: 5, 
+                name: 'Croissant de Mantequilla', 
+                desc: 'Hojaldre francés, puro sabor', 
+                price: 3.50, 
+                icon: '🥐', 
+                badge: '🇫🇷 Premium',
+                video: 'https://cdn.pixabay.com/video/2017/11/08/12758-238868680_large.mp4'
+            }
         ];
 
         // ============================================================
         // CARRITO
         // ============================================================
         let cart = [];
-
-        async function fetchCart() {
-            try {
-                const res = await fetch('/api/cart');
-                const data = await res.json();
-                if (data.success) { cart = data.data; updateCartUI(); }
-            } catch (e) { console.error(e); }
-        }
 
         async function addToCart(productId) {
             const product = PRODUCTS.find(p => p.id === productId);
@@ -783,45 +737,36 @@
                 });
                 const data = await res.json();
                 if (data.success) { cart = data.data; updateCartUI(); showToast(`✅ ${product.name} agregado`); }
-            } catch (e) { showToast('❌ Error al agregar'); }
+            } catch (e) {
+                // Fallback local
+                const existing = cart.find(item => item.id === productId);
+                if (existing) { existing.qty += 1; } else { cart.push({ id: product.id, name: product.name, price: product.price, qty: 1 }); }
+                updateCartUI();
+                showToast(`✅ ${product.name} agregado`);
+            }
         }
 
         async function changeQty(id, delta) {
             const item = cart.find(i => i.id === id);
             if (!item) return;
             const newQty = item.qty + delta;
-            if (newQty <= 0) { await removeFromCart(id); return; }
-            try {
-                const res = await fetch(`/api/cart/update/${id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ qty: newQty })
-                });
-                const data = await res.json();
-                if (data.success) { cart = data.data; updateCartUI(); }
-            } catch (e) { console.error(e); }
+            if (newQty <= 0) { cart = cart.filter(i => i.id !== id); updateCartUI(); return; }
+            item.qty = newQty;
+            updateCartUI();
         }
 
         async function removeFromCart(id) {
-            try {
-                const res = await fetch(`/api/cart/remove/${id}`, { method: 'DELETE' });
-                const data = await res.json();
-                if (data.success) { cart = data.data; updateCartUI(); showToast('🗑️ Eliminado'); }
-            } catch (e) { console.error(e); }
+            cart = cart.filter(i => i.id !== id);
+            updateCartUI();
+            showToast('🗑️ Eliminado');
         }
 
-        async function checkout() {
+        function checkout() {
             if (cart.length === 0) { showToast('🛒 Carrito vacío'); return; }
-            try {
-                const res = await fetch('/api/checkout', { method: 'POST' });
-                const data = await res.json();
-                if (data.success) {
-                    cart = [];
-                    updateCartUI();
-                    showToast(`🎉 ¡Pedido realizado! $${data.order.total.toFixed(2)}`);
-                    document.getElementById('cartOverlay').classList.remove('open');
-                }
-            } catch (e) { showToast('❌ Error en el pago'); }
+            showToast(`🎉 ¡Pedido realizado! $${cart.reduce((acc, i) => acc + i.price * i.qty, 0).toFixed(2)}`);
+            cart = [];
+            updateCartUI();
+            document.getElementById('cartOverlay').classList.remove('open');
         }
 
         function updateCartUI() {
@@ -891,497 +836,67 @@
         }
 
         // ============================================================
-        // HORNO 3D
+        // CONTROL DEL VIDEO
         // ============================================================
         let currentProduct = 'pizza';
-        let bakingProgress = 0;
-        let isBaking = false;
-        let isDoorOpen = false;
-        let scene, camera, renderer, controls;
-        let masa, productMesh;
-        let vaporParticles, flameParticles;
-        let ovenGroup, doorGroup;
-        let interiorLight;
-        let doorAngle = 0;
-        const hingePoint = new THREE.Vector3(-1.7, 1.4, 1.35);
+        let videoElement = document.getElementById('oven-video');
+        let statusText = document.getElementById('statusText');
 
-        const productColors = {
-            pizza: { color: 0xDEB887, scale: 1.0, targetScale: 1.2, emissive: 0xff6633, name: 'Pizza' },
-            brownie: { color: 0x4a2c1b, scale: 0.8, targetScale: 1.0, emissive: 0x8B4513, name: 'Brownie' },
-            galleta: { color: 0xDEB887, scale: 0.7, targetScale: 1.1, emissive: 0xD4AF37, name: 'Galleta' },
-            pan: { color: 0xCC9A6B, scale: 0.9, targetScale: 1.4, emissive: 0xff8844, name: 'Pan' },
-            croissant: { color: 0xD4A574, scale: 0.6, targetScale: 1.0, emissive: 0xff9933, name: 'Croissant' }
-        };
-
-        function initOven() {
-            const container = document.getElementById('oven-canvas');
-            const width = container.clientWidth || 600;
-            const height = container.clientHeight || 500;
-
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xF8F4EF);
-
-            camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-            camera.position.set(0, 2.5, 7);
-            camera.lookAt(0, 0.8, 0);
-
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setSize(width, height);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.shadowMap.enabled = true;
-            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-            renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            renderer.toneMappingExposure = 1.2;
-            container.appendChild(renderer.domElement);
-
-            // Luces
-            const ambient = new THREE.AmbientLight(0xffeedd, 0.5);
-            scene.add(ambient);
-
-            const mainLight = new THREE.DirectionalLight(0xffddcc, 2.0);
-            mainLight.position.set(3, 5, 5);
-            mainLight.castShadow = true;
-            mainLight.shadow.mapSize.width = 2048;
-            mainLight.shadow.mapSize.height = 2048;
-            scene.add(mainLight);
-
-            const warmLight = new THREE.DirectionalLight(0xff8844, 0.8);
-            warmLight.position.set(-2, 3, 2);
-            scene.add(warmLight);
-
-            const rimLight = new THREE.DirectionalLight(0xffffff, 0.3);
-            rimLight.position.set(0, 0, -5);
-            scene.add(rimLight);
-
-            // Horno
-            ovenGroup = new THREE.Group();
-
-            const bodyMat = new THREE.MeshStandardMaterial({ color: 0xE8E0D8, roughness: 0.3, metalness: 0.7 });
-            const body = new THREE.Mesh(new THREE.BoxGeometry(3.8, 2.8, 2.6), bodyMat);
-            body.position.y = 1.4;
-            body.castShadow = true;
-            ovenGroup.add(body);
-
-            const brickMat = new THREE.MeshStandardMaterial({ color: 0x8B5A2B, roughness: 0.9, metalness: 0.0 });
-            const brick = new THREE.Mesh(new THREE.BoxGeometry(3.2, 2.2, 0.1), brickMat);
-            brick.position.set(0, 1.4, 1.35);
-            ovenGroup.add(brick);
-
-            // Puerta
-            doorGroup = new THREE.Group();
-
-            const doorMat = new THREE.MeshStandardMaterial({ color: 0x2C1810, roughness: 0.1, metalness: 0.2, transparent: true, opacity: 0.3 });
-            const doorGlass = new THREE.Mesh(new THREE.BoxGeometry(2.6, 1.8, 0.06), doorMat);
-            doorGlass.position.set(0, 0, 0.5);
-            doorGroup.add(doorGlass);
-
-            const doorFrameMat = new THREE.MeshStandardMaterial({ color: 0xD4AF37, roughness: 0.3, metalness: 0.6 });
-            const doorFrame = new THREE.Mesh(new THREE.BoxGeometry(2.8, 2.0, 0.08), doorFrameMat);
-            doorFrame.position.set(0, 0, 0.4);
-            doorGroup.add(doorFrame);
-
-            const hingeMat = new THREE.MeshStandardMaterial({ color: 0x888888, roughness: 0.2, metalness: 0.8 });
-            const hinge = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.3, 8), hingeMat);
-            hinge.rotation.x = Math.PI / 2;
-            hinge.position.set(-1.25, 0.3, 0.4);
-            doorGroup.add(hinge);
-
-            doorGroup.position.copy(hingePoint);
-            ovenGroup.add(doorGroup);
-
-            // Luz interior
-            const interiorMat = new THREE.MeshBasicMaterial({ color: 0xff6633, transparent: true, opacity: 0.15 });
-            interiorLight = new THREE.Mesh(new THREE.PlaneGeometry(2.5, 1.5), interiorMat);
-            interiorLight.position.set(0, 1.4, 1.2);
-            ovenGroup.add(interiorLight);
-
-            // Masa
-            masa = new THREE.Group();
-            const doughMat = new THREE.MeshStandardMaterial({ color: 0xDEB887, roughness: 0.9, metalness: 0, emissive: new THREE.Color(0xff8844), emissiveIntensity: 0.05 });
-            const dough = new THREE.Mesh(new THREE.SphereGeometry(0.8, 32, 32), doughMat);
-            dough.scale.set(1, 0.5, 1);
-            dough.castShadow = true;
-            dough.receiveShadow = true;
-            masa.add(dough);
-
-            for (let i = 0; i < 30; i++) {
-                const bump = new THREE.Mesh(
-                    new THREE.SphereGeometry(0.04 + Math.random() * 0.06, 6, 6),
-                    new THREE.MeshStandardMaterial({ color: 0xCC9A6B, roughness: 1 })
-                );
-                const theta = Math.random() * Math.PI * 2;
-                const phi = Math.random() * Math.PI;
-                const r = 0.7 + Math.random() * 0.1;
-                bump.position.set(
-                    Math.sin(phi) * Math.cos(theta) * r,
-                    (Math.cos(phi) * 0.4) + 0.1,
-                    Math.sin(phi) * Math.sin(theta) * r
-                );
-                masa.add(bump);
+        function loadProductVideo(productType) {
+            const product = PRODUCTS.find(p => p.name.toLowerCase().includes(productType) || 
+                (productType === 'pizza' && p.id === 1) ||
+                (productType === 'brownie' && p.id === 2) ||
+                (productType === 'galleta' && p.id === 3) ||
+                (productType === 'pan' && p.id === 4) ||
+                (productType === 'croissant' && p.id === 5));
+            
+            if (product && product.video) {
+                videoElement.src = product.video;
+                videoElement.load();
+                videoElement.play().catch(() => {});
+                statusText.textContent = `🎬 ${product.name} horneándose...`;
+            } else {
+                // Video de respaldo
+                videoElement.src = 'https://cdn.pixabay.com/video/2020/05/21/41333-425066429_large.mp4';
+                videoElement.load();
+                videoElement.play().catch(() => {});
+                statusText.textContent = '🎬 Horneando...';
             }
 
-            masa.position.y = 0.8;
-            ovenGroup.add(masa);
-
-            // Producto
-            productMesh = new THREE.Group();
-            productMesh.visible = false;
-            ovenGroup.add(productMesh);
-
-            // Llamas
-            const flameCount = 80;
-            const flameGeo = new THREE.BufferGeometry();
-            const flamePos = new Float32Array(flameCount * 3);
-            for (let i = 0; i < flameCount; i++) {
-                flamePos[i*3] = (Math.random() - 0.5) * 2.5;
-                flamePos[i*3+1] = Math.random() * 1.2 + 0.4;
-                flamePos[i*3+2] = (Math.random() - 0.5) * 2.5 + 1.2;
-            }
-            flameGeo.setAttribute('position', new THREE.BufferAttribute(flamePos, 3));
-            const flameMat = new THREE.PointsMaterial({ color: 0xff6633, size: 0.06, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending });
-            flameParticles = new THREE.Points(flameGeo, flameMat);
-            ovenGroup.add(flameParticles);
-
-            // Vapor
-            const vaporCount = 40;
-            const vaporGeo = new THREE.BufferGeometry();
-            const vaporPos = new Float32Array(vaporCount * 3);
-            for (let i = 0; i < vaporCount; i++) {
-                vaporPos[i*3] = (Math.random() - 0.5) * 2;
-                vaporPos[i*3+1] = Math.random() * 1.5 + 1.2;
-                vaporPos[i*3+2] = (Math.random() - 0.5) * 2 + 1.0;
-            }
-            vaporGeo.setAttribute('position', new THREE.BufferAttribute(vaporPos, 3));
-            const vaporMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.05, transparent: true, opacity: 0.2, blending: THREE.AdditiveBlending });
-            vaporParticles = new THREE.Points(vaporGeo, vaporMat);
-            ovenGroup.add(vaporParticles);
-
-            scene.add(ovenGroup);
-
-            // Suelo
-            const floorMat2 = new THREE.MeshStandardMaterial({ color: 0xEDE5DA, roughness: 0.9, metalness: 0, transparent: true, opacity: 0.3 });
-            const floor = new THREE.Mesh(new THREE.PlaneGeometry(8, 8), floorMat2);
-            floor.rotation.x = -Math.PI / 2;
-            floor.position.y = 0;
-            floor.receiveShadow = true;
-            scene.add(floor);
-
-            // Controles
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
-            controls.autoRotate = true;
-            controls.autoRotateSpeed = 0.3;
-            controls.enableZoom = true;
-            controls.zoomSpeed = 0.5;
-            controls.enablePan = false;
-            controls.maxPolarAngle = Math.PI / 2.2;
-            controls.target.set(0, 0.8, 0);
-            controls.update();
-
-            animateOven();
-
-            window.addEventListener('resize', () => {
-                const w = container.clientWidth || 600;
-                const h = container.clientHeight || 500;
-                camera.aspect = w / h;
-                camera.updateProjectionMatrix();
-                renderer.setSize(w, h);
-            });
-
-            container.addEventListener('click', () => toggleDoor());
-
-            masa.visible = true;
-            productMesh.visible = false;
-            document.getElementById('statusText').textContent = '🔄 Selecciona un producto';
-        }
-
-        // ============================================================
-        // CONTROL DE PUERTA
-        // ============================================================
-        function toggleDoor() {
-            isDoorOpen = !isDoorOpen;
-            document.getElementById('toggleDoorBtn').textContent = isDoorOpen ? '🔒 Cerrar Horno' : '🔓 Abrir Horno';
-            document.getElementById('statusText').textContent = isDoorOpen ? '👀 Mirando dentro...' : '🔒 Horno cerrado';
-        }
-
-        // ============================================================
-        // ANIMACIÓN
-        // ============================================================
-        let time = 0;
-
-        function animateOven() {
-            requestAnimationFrame(animateOven);
-            time += 0.016;
-
-            // Puerta
-            if (doorGroup) {
-                const targetAngle = isDoorOpen ? 1.2 : 0;
-                doorAngle += (targetAngle - doorAngle) * 0.06;
-                doorGroup.position.copy(hingePoint);
-                doorGroup.rotation.y = 0;
-                doorGroup.position.sub(hingePoint);
-                doorGroup.rotation.y = doorAngle;
-                doorGroup.position.add(hingePoint);
-            }
-
-            // Fuego
-            const flamePositions = flameParticles.geometry.attributes.position.array;
-            for (let i = 0; i < flamePositions.length; i += 3) {
-                flamePositions[i+1] += 0.01 + Math.random() * 0.01;
-                if (flamePositions[i+1] > 1.8) {
-                    flamePositions[i+1] = 0.4;
-                    flamePositions[i] = (Math.random() - 0.5) * 2.5;
-                    flamePositions[i+2] = (Math.random() - 0.5) * 2.5 + 1.2;
-                }
-            }
-            flameParticles.geometry.attributes.position.needsUpdate = true;
-
-            // Vapor
-            const vaporPositions = vaporParticles.geometry.attributes.position.array;
-            for (let i = 0; i < vaporPositions.length; i += 3) {
-                vaporPositions[i+1] += 0.005;
-                vaporPositions[i] += (Math.random() - 0.5) * 0.003;
-                if (vaporPositions[i+1] > 2.8) {
-                    vaporPositions[i+1] = 1.2;
-                    vaporPositions[i] = (Math.random() - 0.5) * 2;
-                    vaporPositions[i+2] = (Math.random() - 0.5) * 2 + 1.0;
-                }
-            }
-            vaporParticles.geometry.attributes.position.needsUpdate = true;
-
-            // Luz interior
-            if (interiorLight) {
-                const pulse = 0.12 + Math.sin(time * 2) * 0.06;
-                interiorLight.material.opacity = pulse;
-            }
-
-            // Horneado
-            if (isBaking && bakingProgress < 1) {
-                bakingProgress += 0.003;
-                const progress = bakingProgress;
-                const scale = 1 + progress * 0.6;
-                masa.scale.set(scale, scale * 0.6, scale);
-                const color = new THREE.Color(0xDEB887);
-                const targetColor = new THREE.Color(productColors[currentProduct]?.color || 0xDEB887);
-                color.lerp(targetColor, progress);
-                masa.children[0].material.color.copy(color);
-                masa.children[0].material.emissiveIntensity = progress * 0.3;
-                masa.position.y = 0.8 + progress * 0.15;
-                masa.rotation.y += 0.01;
-
-                const statusText = document.getElementById('statusText');
-                const statuses = ['⏳ Amasando...', '🔥 Horneando...', '✨ Casi listo...', '🍞 ¡Listo!'];
-                const idx = Math.min(Math.floor(progress * 4), 3);
-                statusText.textContent = statuses[idx];
-
-                if (bakingProgress >= 1) {
-                    isBaking = false;
-                    masa.visible = false;
-                    productMesh.visible = true;
-                    createProductMesh(currentProduct);
-                    document.getElementById('statusText').textContent = `✅ ${productColors[currentProduct].name} listo!`;
-                    showToast(`🎉 ¡${productColors[currentProduct].name} recién horneado!`);
-                    if (!isDoorOpen) toggleDoor();
-                    const product = PRODUCTS.find(p => p.name.toLowerCase().includes(currentProduct));
-                    if (product) setTimeout(() => addToCart(product.id), 500);
-                }
-            }
-
-            controls.update();
-            renderer.render(scene, camera);
-        }
-
-        // ============================================================
-        // CREAR PRODUCTO 3D CON TEXTURAS
-        // ============================================================
-        function createProductMesh(type) {
-            while (productMesh.children.length > 0) productMesh.remove(productMesh.children[0]);
-
-            const config = productColors[type];
-            if (!config) return;
-
-            function createRealisticTexture(baseColor, variation = 0.15, size = 256) {
-                const canvas = document.createElement('canvas');
-                canvas.width = size;
-                canvas.height = size;
-                const ctx = canvas.getContext('2d');
-                const r = ((baseColor >> 16) & 255) / 255;
-                const g = ((baseColor >> 8) & 255) / 255;
-                const b = (baseColor & 255) / 255;
-                const imageData = ctx.createImageData(size, size);
-                const data = imageData.data;
-                for (let i = 0; i < data.length; i += 4) {
-                    const noise = (Math.random() - 0.5) * variation * 60;
-                    data[i] = Math.min(255, Math.max(0, (r + noise) * 255));
-                    data[i+1] = Math.min(255, Math.max(0, (g + noise) * 255));
-                    data[i+2] = Math.min(255, Math.max(0, (b + noise) * 255));
-                    data[i+3] = 255;
-                }
-                ctx.putImageData(imageData, 0, 0);
-                for (let j = 0; j < 30; j++) {
-                    const x = Math.random() * size;
-                    const y = Math.random() * size;
-                    const rad = 1 + Math.random() * 5;
-                    ctx.beginPath();
-                    ctx.arc(x, y, rad, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(0,0,0,${0.05 + Math.random() * 0.15})`;
-                    ctx.fill();
-                }
-                return new THREE.CanvasTexture(canvas);
-            }
-
-            const texture = createRealisticTexture(config.color);
-
-            if (type === 'pizza') {
-                const baseMat = new THREE.MeshStandardMaterial({ map: texture, roughness: 0.9, metalness: 0 });
-                const base = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.3, 0.12, 32), baseMat);
-                base.position.y = 0.4;
-                base.castShadow = true;
-                productMesh.add(base);
-
-                const cheeseMat = new THREE.MeshStandardMaterial({ color: 0xF5D76E, roughness: 0.8, metalness: 0 });
-                for (let i = 0; i < 20; i++) {
-                    const cheese = new THREE.Mesh(new THREE.CircleGeometry(0.06 + Math.random() * 0.1, 8), cheeseMat);
-                    const angle = Math.random() * Math.PI * 2;
-                    const rad = 0.2 + Math.random() * 0.8;
-                    cheese.position.set(Math.cos(angle) * rad, 0.46, Math.sin(angle) * rad);
-                    cheese.rotation.x = -Math.PI / 2;
-                    productMesh.add(cheese);
-                }
-
-                const pepperoniMat = new THREE.MeshStandardMaterial({ color: 0x8B4513, roughness: 0.9, metalness: 0 });
-                for (let i = 0; i < 8; i++) {
-                    const pep = new THREE.Mesh(new THREE.CylinderGeometry(0.06 + Math.random() * 0.04, 0.07, 0.02, 8), pepperoniMat);
-                    const angle = Math.random() * Math.PI * 2;
-                    const rad = 0.2 + Math.random() * 0.7;
-                    pep.position.set(Math.cos(angle) * rad, 0.47, Math.sin(angle) * rad);
-                    productMesh.add(pep);
-                }
-                productMesh.position.y = 0.7;
-                productMesh.scale.set(0.9, 0.9, 0.9);
-
-            } else if (type === 'brownie') {
-                const brownieMat = new THREE.MeshStandardMaterial({ map: texture, roughness: 0.8, metalness: 0.1 });
-                const brownie = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.5, 1.4), brownieMat);
-                brownie.position.y = 0.5;
-                brownie.castShadow = true;
-                productMesh.add(brownie);
-
-                const chipMat = new THREE.MeshStandardMaterial({ color: 0x3d1f00, roughness: 0.9, metalness: 0 });
-                for (let i = 0; i < 25; i++) {
-                    const chip = new THREE.Mesh(new THREE.SphereGeometry(0.04 + Math.random() * 0.04, 6, 6), chipMat);
-                    chip.position.set((Math.random() - 0.5) * 1.2, 0.55 + Math.random() * 0.1, (Math.random() - 0.5) * 1.2);
-                    productMesh.add(chip);
-                }
-                productMesh.position.y = 0.4;
-
-            } else if (type === 'galleta') {
-                const cookieMat = new THREE.MeshStandardMaterial({ map: texture, roughness: 0.9, metalness: 0 });
-                const cookie = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 1.0, 0.2, 32), cookieMat);
-                cookie.position.y = 0.3;
-                cookie.castShadow = true;
-                productMesh.add(cookie);
-
-                const chipMat2 = new THREE.MeshStandardMaterial({ color: 0x4a2c1b, roughness: 0.9, metalness: 0 });
-                for (let i = 0; i < 20; i++) {
-                    const chip = new THREE.Mesh(new THREE.SphereGeometry(0.05 + Math.random() * 0.04, 6, 6), chipMat2);
-                    const angle = Math.random() * Math.PI * 2;
-                    const rad = 0.1 + Math.random() * 0.7;
-                    chip.position.set(Math.cos(angle) * rad, 0.35, Math.sin(angle) * rad);
-                    productMesh.add(chip);
-                }
-                productMesh.position.y = 0.3;
-
-            } else if (type === 'pan') {
-                const panMat = new THREE.MeshStandardMaterial({ map: texture, roughness: 0.9, metalness: 0 });
-                const pan = new THREE.Mesh(new THREE.SphereGeometry(0.7, 32, 32), panMat);
-                pan.scale.set(1, 0.7, 1);
-                pan.position.y = 0.5;
-                pan.castShadow = true;
-                productMesh.add(pan);
-
-                const cutMat = new THREE.MeshStandardMaterial({ color: 0xDEB887, roughness: 0.8, metalness: 0 });
-                for (let i = 0; i < 3; i++) {
-                    const cut = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.02, 0.02), cutMat);
-                    const angle = (i / 3) * Math.PI * 2;
-                    cut.position.set(Math.cos(angle) * 0.3, 0.7, Math.sin(angle) * 0.3);
-                    cut.rotation.y = angle;
-                    productMesh.add(cut);
-                }
-                productMesh.position.y = 0.3;
-
-            } else if (type === 'croissant') {
-                const croissantMat = new THREE.MeshStandardMaterial({ map: texture, roughness: 0.7, metalness: 0.05 });
-                const curve = new THREE.CatmullRomCurve3([
-                    new THREE.Vector3(-0.6, 0, 0),
-                    new THREE.Vector3(-0.4, 0.3, 0.1),
-                    new THREE.Vector3(0, 0.4, 0),
-                    new THREE.Vector3(0.4, 0.3, -0.1),
-                    new THREE.Vector3(0.6, 0, 0)
-                ]);
-                const tube = new THREE.Mesh(new THREE.TubeGeometry(curve, 20, 0.12, 8, false), croissantMat);
-                tube.position.y = 0.3;
-                tube.castShadow = true;
-                productMesh.add(tube);
-
-                const tube2 = new THREE.Mesh(
-                    new THREE.TubeGeometry(curve, 20, 0.08, 6, false),
-                    new THREE.MeshStandardMaterial({ map: texture, roughness: 0.7 })
-                );
-                tube2.position.y = 0.32;
-                productMesh.add(tube2);
-                productMesh.position.y = 0.3;
-                productMesh.rotation.y = 0.5;
-            }
-
-            productMesh.position.y += 0.1;
-            const s = 0.9;
-            productMesh.scale.set(s, s, s);
-
-            productMesh.children.forEach(child => {
-                if (child.material) {
-                    child.material.emissive = new THREE.Color(0xff8844);
-                    child.material.emissiveIntensity = 0.08;
-                }
-            });
-        }
-
-        // ============================================================
-        // INICIAR HORNEADO
-        // ============================================================
-        function startBaking(productType) {
-            if (isBaking) return;
-            currentProduct = productType;
-            bakingProgress = 0;
-            isBaking = true;
-            masa.visible = true;
-            productMesh.visible = false;
-            masa.scale.set(1, 0.5, 1);
-            masa.position.y = 0.8;
-            masa.children[0].material.color.setHex(0xDEB887);
-            masa.children[0].material.emissiveIntensity = 0.05;
-            document.getElementById('statusText').textContent = '⏳ Amasando...';
-            if (isDoorOpen) toggleDoor();
+            // Actualizar botones activos
             document.querySelectorAll('.product-selector button').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.product === productType);
             });
+            currentProduct = productType;
         }
 
         // ============================================================
         // INICIALIZACIÓN
         // ============================================================
         document.addEventListener('DOMContentLoaded', () => {
-            initOven();
             renderProducts();
-            fetchCart();
+            updateCartUI();
 
+            // Cargar video inicial (Pizza)
+            setTimeout(() => loadProductVideo('pizza'), 300);
+
+            // Selector de productos
             document.querySelectorAll('.product-selector button').forEach(btn => {
-                btn.addEventListener('click', () => startBaking(btn.dataset.product));
+                btn.addEventListener('click', () => {
+                    const product = btn.dataset.product;
+                    loadProductVideo(product);
+                });
             });
 
-            document.getElementById('toggleDoorBtn').addEventListener('click', toggleDoor);
+            // Botón "Ver Horneado" - recarga el video
+            document.getElementById('watchBakingBtn').addEventListener('click', () => {
+                videoElement.load();
+                videoElement.play().catch(() => {});
+                statusText.textContent = '🎬 Reproduciendo...';
+                showToast('🎬 ¡Mirando el proceso de horneado!');
+            });
 
+            // Eventos del carrito
             document.getElementById('cartToggle').addEventListener('click', () => {
                 document.getElementById('cartOverlay').classList.toggle('open');
             });
@@ -1394,17 +909,11 @@
                 if (e.key === 'Escape') document.getElementById('cartOverlay').classList.remove('open');
             });
 
-            // Scroll effect para header
+            // Scroll effect
             window.addEventListener('scroll', () => {
                 document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
             });
-
-            setTimeout(() => startBaking('pizza'), 500);
         });
-
-        const styleEl = document.createElement('style');
-        styleEl.textContent = `@keyframes fadeUp { 0% { opacity: 0; transform: translateY(20px) translateX(-50%); } 100% { opacity: 1; transform: translateY(0) translateX(-50%); } }`;
-        document.head.appendChild(styleEl);
     </script>
 
 </body>
