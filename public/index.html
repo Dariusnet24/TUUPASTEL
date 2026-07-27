@@ -159,6 +159,24 @@
             color: #FDFBF7;
         }
 
+        /* Botón abrir horno */
+        .btn-toggle-door {
+            padding: 12px 30px;
+            background: #2C1810;
+            color: #FDFBF7;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            transition: 0.3s;
+            margin-top: 5px;
+        }
+        .btn-toggle-door:hover {
+            background: #D4AF37;
+            transform: scale(1.02);
+        }
+
         /* ===== HORNO 3D (contenedor) ===== */
         .oven-container {
             flex: 1;
@@ -173,6 +191,7 @@
             overflow: hidden;
             box-shadow: 0 20px 60px rgba(0,0,0,0.05);
             background: #F8F4EF;
+            cursor: pointer;
         }
 
         /* Estado del horneado */
@@ -193,6 +212,7 @@
             gap: 12px;
             z-index: 10;
             border: 1px solid rgba(212, 175, 55, 0.2);
+            pointer-events: none;
         }
         .baking-status .dot {
             width: 10px;
@@ -455,6 +475,7 @@
                 <button data-product="pan">🥖 Pan</button>
                 <button data-product="croissant">🥐 Croissant</button>
             </div>
+            <button class="btn-toggle-door" id="toggleDoorBtn">🔓 Abrir Horno</button>
         </div>
         <div class="oven-container">
             <div id="oven-canvas"></div>
@@ -637,16 +658,19 @@
         }
 
         // ============================================================
-        // HORNO 3D INTERACTIVO CON TRANSFORMACIÓN DE MASA
+        // HORNO 3D INTERACTIVO CON APERTURA DE PUERTA
         // ============================================================
         let currentProduct = 'pizza';
         let bakingProgress = 0;
         let isBaking = false;
+        let isDoorOpen = false;
         let scene, camera, renderer, controls;
         let masa, productMesh;
         let vaporParticles, flameParticles;
-        let ovenGroup;
+        let ovenGroup, doorGroup;
         let interiorLight;
+        let doorAngle = 0;
+        const hingePoint = new THREE.Vector3(-1.7, 1.4, 1.35);
 
         const productColors = {
             pizza: { color: 0xDEB887, scale: 1.0, targetScale: 1.2, emissive: 0xff6633, name: 'Pizza' },
@@ -699,31 +723,50 @@
             // ===== HORNO =====
             ovenGroup = new THREE.Group();
 
-            // Cuerpo del horno
-            const bodyMat = new THREE.MeshStandardMaterial({ color: 0xF0EBE6, roughness: 0.5, metalness: 0.1 });
+            // Cuerpo del horno - con textura de acero
+            const bodyMat = new THREE.MeshStandardMaterial({ color: 0xE8E0D8, roughness: 0.3, metalness: 0.7 });
             const body = new THREE.Mesh(new THREE.BoxGeometry(3.8, 2.8, 2.6), bodyMat);
             body.position.y = 1.4;
             body.castShadow = true;
             ovenGroup.add(body);
 
-            // Marco del horno (dorado)
-            const frameMat = new THREE.MeshStandardMaterial({ color: 0xD4AF37, roughness: 0.3, metalness: 0.6 });
-            const frame = new THREE.Mesh(new THREE.BoxGeometry(3.2, 2.2, 0.08), frameMat);
-            frame.position.set(0, 1.4, 1.4);
-            ovenGroup.add(frame);
+            // Marco interior (ladrillo refractario simulado)
+            const brickMat = new THREE.MeshStandardMaterial({ color: 0x8B5A2B, roughness: 0.9, metalness: 0.0 });
+            const brick = new THREE.Mesh(new THREE.BoxGeometry(3.2, 2.2, 0.1), brickMat);
+            brick.position.set(0, 1.4, 1.35);
+            ovenGroup.add(brick);
 
-            // Puerta (vidrio)
-            const glassMat = new THREE.MeshStandardMaterial({
+            // ===== PUERTA (separada para animar) =====
+            doorGroup = new THREE.Group();
+
+            // Vidrio de la puerta
+            const doorMat = new THREE.MeshStandardMaterial({
                 color: 0x2C1810,
                 roughness: 0.1,
                 metalness: 0.2,
                 transparent: true,
-                opacity: 0.35,
-                envMapIntensity: 0.5
+                opacity: 0.3
             });
-            const glass = new THREE.Mesh(new THREE.BoxGeometry(2.8, 1.8, 0.06), glassMat);
-            glass.position.set(0, 1.4, 1.35);
-            ovenGroup.add(glass);
+            const doorGlass = new THREE.Mesh(new THREE.BoxGeometry(2.6, 1.8, 0.06), doorMat);
+            doorGlass.position.set(0, 0, 0.5);
+            doorGroup.add(doorGlass);
+
+            // Marco de la puerta (dorado)
+            const doorFrameMat = new THREE.MeshStandardMaterial({ color: 0xD4AF37, roughness: 0.3, metalness: 0.6 });
+            const doorFrame = new THREE.Mesh(new THREE.BoxGeometry(2.8, 2.0, 0.08), doorFrameMat);
+            doorFrame.position.set(0, 0, 0.4);
+            doorGroup.add(doorFrame);
+
+            // Bisagra
+            const hingeMat = new THREE.MeshStandardMaterial({ color: 0x888888, roughness: 0.2, metalness: 0.8 });
+            const hinge = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.3, 8), hingeMat);
+            hinge.rotation.x = Math.PI / 2;
+            hinge.position.set(-1.25, 0.3, 0.4);
+            doorGroup.add(hinge);
+
+            // Posicionar puerta
+            doorGroup.position.copy(hingePoint);
+            ovenGroup.add(doorGroup);
 
             // Luz interior del horno (calor)
             const interiorMat = new THREE.MeshBasicMaterial({
@@ -735,10 +778,8 @@
             interiorLight.position.set(0, 1.4, 1.2);
             ovenGroup.add(interiorLight);
 
-            // ===== MASA (se transformará) =====
+            // ===== MASA =====
             masa = new THREE.Group();
-            
-            // Masa base (esfera achatada)
             const doughMat = new THREE.MeshStandardMaterial({
                 color: 0xDEB887,
                 roughness: 0.9,
@@ -746,14 +787,13 @@
                 emissive: new THREE.Color(0xff8844),
                 emissiveIntensity: 0.05
             });
-            const doughGeo = new THREE.SphereGeometry(0.8, 32, 32);
-            const dough = new THREE.Mesh(doughGeo, doughMat);
+            const dough = new THREE.Mesh(new THREE.SphereGeometry(0.8, 32, 32), doughMat);
             dough.scale.set(1, 0.5, 1);
             dough.castShadow = true;
             dough.receiveShadow = true;
             masa.add(dough);
 
-            // Arrugas de la masa (detalles)
+            // Arrugas de la masa
             for (let i = 0; i < 30; i++) {
                 const bump = new THREE.Mesh(
                     new THREE.SphereGeometry(0.04 + Math.random() * 0.06, 6, 6),
@@ -773,32 +813,27 @@
             masa.position.y = 0.8;
             ovenGroup.add(masa);
 
-            // ===== PRODUCTO (inicialmente oculto) =====
+            // ===== PRODUCTO =====
             productMesh = new THREE.Group();
             productMesh.visible = false;
             ovenGroup.add(productMesh);
 
-            // ===== LLAMAS (partículas) =====
+            // ===== LLAMAS =====
             const flameCount = 80;
             const flameGeo = new THREE.BufferGeometry();
             const flamePos = new Float32Array(flameCount * 3);
-            const flameSizes = new Float32Array(flameCount);
             for (let i = 0; i < flameCount; i++) {
                 flamePos[i*3] = (Math.random() - 0.5) * 2.5;
                 flamePos[i*3+1] = Math.random() * 1.2 + 0.4;
                 flamePos[i*3+2] = (Math.random() - 0.5) * 2.5 + 1.2;
-                flameSizes[i] = 0.03 + Math.random() * 0.05;
             }
             flameGeo.setAttribute('position', new THREE.BufferAttribute(flamePos, 3));
-            flameGeo.setAttribute('size', new THREE.BufferAttribute(flameSizes, 1));
-            
             const flameMat = new THREE.PointsMaterial({
                 color: 0xff6633,
                 size: 0.06,
                 transparent: true,
                 opacity: 0.7,
-                blending: THREE.AdditiveBlending,
-                sizeAttenuation: true
+                blending: THREE.AdditiveBlending
             });
             flameParticles = new THREE.Points(flameGeo, flameMat);
             ovenGroup.add(flameParticles);
@@ -818,8 +853,7 @@
                 size: 0.05,
                 transparent: true,
                 opacity: 0.2,
-                blending: THREE.AdditiveBlending,
-                sizeAttenuation: true
+                blending: THREE.AdditiveBlending
             });
             vaporParticles = new THREE.Points(vaporGeo, vaporMat);
             ovenGroup.add(vaporParticles);
@@ -865,23 +899,49 @@
                 renderer.setSize(w, h);
             });
 
-            // Iniciar con masa visible
+            // Click en el horno para abrir/cerrar
+            container.addEventListener('click', () => toggleDoor());
+
             masa.visible = true;
             productMesh.visible = false;
             document.getElementById('statusText').textContent = '🔄 Selecciona un producto para hornear';
         }
 
         // ============================================================
+        // CONTROL DE PUERTA
+        // ============================================================
+        function toggleDoor() {
+            isDoorOpen = !isDoorOpen;
+            document.getElementById('toggleDoorBtn').textContent = isDoorOpen ? '🔒 Cerrar Horno' : '🔓 Abrir Horno';
+            if (isDoorOpen) {
+                document.getElementById('statusText').textContent = '👀 Mirando dentro del horno...';
+            } else {
+                document.getElementById('statusText').textContent = '🔒 Horno cerrado';
+            }
+        }
+
+        // ============================================================
         // ANIMACIÓN DEL HORNO
         // ============================================================
         let time = 0;
-        let bakingAnimation = 0;
 
         function animateOven() {
             requestAnimationFrame(animateOven);
             time += 0.016;
 
-            // Animar partículas de fuego
+            // ===== ABRIR/CERRAR PUERTA =====
+            if (doorGroup) {
+                const targetAngle = isDoorOpen ? 1.2 : 0;
+                doorAngle += (targetAngle - doorAngle) * 0.06;
+                
+                doorGroup.position.copy(hingePoint);
+                doorGroup.rotation.y = 0;
+                doorGroup.position.sub(hingePoint);
+                doorGroup.rotation.y = doorAngle;
+                doorGroup.position.add(hingePoint);
+            }
+
+            // ===== ANIMAR FUEGO =====
             const flamePositions = flameParticles.geometry.attributes.position.array;
             for (let i = 0; i < flamePositions.length; i += 3) {
                 flamePositions[i+1] += 0.01 + Math.random() * 0.01;
@@ -893,7 +953,7 @@
             }
             flameParticles.geometry.attributes.position.needsUpdate = true;
 
-            // Animar vapor
+            // ===== ANIMAR VAPOR =====
             const vaporPositions = vaporParticles.geometry.attributes.position.array;
             for (let i = 0; i < vaporPositions.length; i += 3) {
                 vaporPositions[i+1] += 0.005;
@@ -906,45 +966,37 @@
             }
             vaporParticles.geometry.attributes.position.needsUpdate = true;
 
-            // Pulsar luz interior
+            // ===== PULSAR LUZ =====
             if (interiorLight) {
                 const pulse = 0.12 + Math.sin(time * 2) * 0.06;
                 interiorLight.material.opacity = pulse;
             }
 
-            // Si está horneando
+            // ===== HORNEADO =====
             if (isBaking && bakingProgress < 1) {
                 bakingProgress += 0.003;
                 const progress = bakingProgress;
                 
-                // Escalar masa (crece)
                 const scale = 1 + progress * 0.6;
                 masa.scale.set(scale, scale * 0.6, scale);
                 
-                // Cambiar color de la masa (se dora)
                 const color = new THREE.Color(0xDEB887);
                 const targetColor = new THREE.Color(productColors[currentProduct]?.color || 0xDEB887);
                 color.lerp(targetColor, progress);
                 masa.children[0].material.color.copy(color);
                 
-                // Emisión (calor)
                 const emissiveIntensity = progress * 0.3;
                 masa.children[0].material.emissiveIntensity = emissiveIntensity;
                 
-                // Hacer que la masa "suba" (levadura)
                 masa.position.y = 0.8 + progress * 0.15;
-                
-                // Rotación suave
                 masa.rotation.y += 0.01;
                 masa.rotation.x = Math.sin(progress * 5) * 0.05;
                 
-                // Actualizar estado
                 const statusText = document.getElementById('statusText');
                 const statuses = ['⏳ Amasando...', '🔥 Horneando...', '✨ Casi listo...', '🍞 ¡Listo!'];
                 const idx = Math.min(Math.floor(progress * 4), 3);
                 statusText.textContent = statuses[idx];
                 
-                // Cuando termina, mostrar el producto
                 if (bakingProgress >= 1) {
                     isBaking = false;
                     masa.visible = false;
@@ -952,10 +1004,11 @@
                     createProductMesh(currentProduct);
                     document.getElementById('statusText').textContent = `✅ ${productColors[currentProduct].name} listo!`;
                     
-                    // Notificación
                     showToast(`🎉 ¡${productColors[currentProduct].name} recién horneado!`);
                     
-                    // Agregar al carrito automáticamente (opcional)
+                    // Abrir puerta automáticamente
+                    if (!isDoorOpen) toggleDoor();
+                    
                     const product = PRODUCTS.find(p => p.name.toLowerCase().includes(currentProduct));
                     if (product) {
                         setTimeout(() => addToCart(product.id), 500);
@@ -968,10 +1021,9 @@
         }
 
         // ============================================================
-        // CREAR PRODUCTO 3D REALISTA
+        // CREAR PRODUCTO 3D CON TEXTURAS REALISTAS
         // ============================================================
         function createProductMesh(type) {
-            // Limpiar producto anterior
             while (productMesh.children.length > 0) {
                 productMesh.remove(productMesh.children[0]);
             }
@@ -979,181 +1031,128 @@
             const config = productColors[type];
             if (!config) return;
 
+            // ===== FUNCIÓN PARA CREAR TEXTURAS REALISTAS =====
+            function createRealisticTexture(baseColor, variation = 0.15, size = 256) {
+                const canvas = document.createElement('canvas');
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext('2d');
+                
+                const r = ((baseColor >> 16) & 255) / 255;
+                const g = ((baseColor >> 8) & 255) / 255;
+                const b = (baseColor & 255) / 255;
+                
+                // Ruido para textura realista
+                const imageData = ctx.createImageData(size, size);
+                const data = imageData.data;
+                for (let i = 0; i < data.length; i += 4) {
+                    const noise = (Math.random() - 0.5) * variation * 60;
+                    data[i] = Math.min(255, Math.max(0, (r + noise) * 255));
+                    data[i+1] = Math.min(255, Math.max(0, (g + noise) * 255));
+                    data[i+2] = Math.min(255, Math.max(0, (b + noise) * 255));
+                    data[i+3] = 255;
+                }
+                ctx.putImageData(imageData, 0, 0);
+                
+                // Añadir manchas/granos
+                for (let j = 0; j < 30; j++) {
+                    const x = Math.random() * size;
+                    const y = Math.random() * size;
+                    const rad = 1 + Math.random() * 5;
+                    const alpha = 0.05 + Math.random() * 0.15;
+                    ctx.beginPath();
+                    ctx.arc(x, y, rad, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(0,0,0,${alpha})`;
+                    ctx.fill();
+                }
+                
+                return new THREE.CanvasTexture(canvas);
+            }
+
+            const texture = createRealisticTexture(config.color);
+
             if (type === 'pizza') {
-                // Base de pizza
-                const baseMat = new THREE.MeshStandardMaterial({
-                    color: 0xDEB887,
-                    roughness: 0.9,
-                    metalness: 0,
-                });
+                const baseMat = new THREE.MeshStandardMaterial({ map: texture, roughness: 0.9, metalness: 0 });
                 const base = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.3, 0.12, 32), baseMat);
                 base.position.y = 0.4;
                 base.castShadow = true;
                 productMesh.add(base);
 
-                // Borde (más alto)
-                const borderMat = new THREE.MeshStandardMaterial({
-                    color: 0xD4A574,
-                    roughness: 0.9,
-                    metalness: 0,
-                });
-                const border = new THREE.Mesh(new THREE.TorusGeometry(1.15, 0.08, 16, 32), borderMat);
-                border.position.y = 0.46;
-                border.rotation.x = Math.PI / 2;
-                productMesh.add(border);
-
-                // Queso (manchas)
-                const cheeseMat = new THREE.MeshStandardMaterial({
-                    color: 0xF5D76E,
-                    roughness: 0.8,
-                    metalness: 0,
-                });
-                for (let i = 0; i < 15; i++) {
-                    const cheese = new THREE.Mesh(
-                        new THREE.CircleGeometry(0.08 + Math.random() * 0.12, 8),
-                        cheeseMat
-                    );
+                // Queso
+                const cheeseMat = new THREE.MeshStandardMaterial({ color: 0xF5D76E, roughness: 0.8, metalness: 0 });
+                for (let i = 0; i < 20; i++) {
+                    const cheese = new THREE.Mesh(new THREE.CircleGeometry(0.06 + Math.random() * 0.1, 8), cheeseMat);
                     const angle = Math.random() * Math.PI * 2;
                     const rad = 0.2 + Math.random() * 0.8;
-                    cheese.position.set(
-                        Math.cos(angle) * rad,
-                        0.46,
-                        Math.sin(angle) * rad
-                    );
+                    cheese.position.set(Math.cos(angle) * rad, 0.46, Math.sin(angle) * rad);
                     cheese.rotation.x = -Math.PI / 2;
                     productMesh.add(cheese);
                 }
 
                 // Pepperoni
-                const pepperoniMat = new THREE.MeshStandardMaterial({
-                    color: 0x8B4513,
-                    roughness: 0.9,
-                    metalness: 0,
-                });
+                const pepperoniMat = new THREE.MeshStandardMaterial({ color: 0x8B4513, roughness: 0.9, metalness: 0 });
                 for (let i = 0; i < 8; i++) {
-                    const pep = new THREE.Mesh(
-                        new THREE.CylinderGeometry(0.06 + Math.random() * 0.04, 0.07, 0.02, 8),
-                        pepperoniMat
-                    );
+                    const pep = new THREE.Mesh(new THREE.CylinderGeometry(0.06 + Math.random() * 0.04, 0.07, 0.02, 8), pepperoniMat);
                     const angle = Math.random() * Math.PI * 2;
                     const rad = 0.2 + Math.random() * 0.7;
-                    pep.position.set(
-                        Math.cos(angle) * rad,
-                        0.47,
-                        Math.sin(angle) * rad
-                    );
+                    pep.position.set(Math.cos(angle) * rad, 0.47, Math.sin(angle) * rad);
                     productMesh.add(pep);
                 }
-
                 productMesh.position.y = 0.7;
                 productMesh.scale.set(0.9, 0.9, 0.9);
 
             } else if (type === 'brownie') {
-                const brownieMat = new THREE.MeshStandardMaterial({
-                    color: 0x4a2c1b,
-                    roughness: 0.8,
-                    metalness: 0.1,
-                });
+                const brownieMat = new THREE.MeshStandardMaterial({ map: texture, roughness: 0.8, metalness: 0.1 });
                 const brownie = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.5, 1.4), brownieMat);
                 brownie.position.y = 0.5;
                 brownie.castShadow = true;
                 productMesh.add(brownie);
 
-                // Chispas
-                const chipMat = new THREE.MeshStandardMaterial({
-                    color: 0x3d1f00,
-                    roughness: 0.9,
-                    metalness: 0,
-                });
+                const chipMat = new THREE.MeshStandardMaterial({ color: 0x3d1f00, roughness: 0.9, metalness: 0 });
                 for (let i = 0; i < 25; i++) {
-                    const chip = new THREE.Mesh(
-                        new THREE.SphereGeometry(0.04 + Math.random() * 0.04, 6, 6),
-                        chipMat
-                    );
-                    chip.position.set(
-                        (Math.random() - 0.5) * 1.2,
-                        0.55 + Math.random() * 0.1,
-                        (Math.random() - 0.5) * 1.2
-                    );
+                    const chip = new THREE.Mesh(new THREE.SphereGeometry(0.04 + Math.random() * 0.04, 6, 6), chipMat);
+                    chip.position.set((Math.random() - 0.5) * 1.2, 0.55 + Math.random() * 0.1, (Math.random() - 0.5) * 1.2);
                     productMesh.add(chip);
                 }
                 productMesh.position.y = 0.4;
 
             } else if (type === 'galleta') {
-                const cookieMat = new THREE.MeshStandardMaterial({
-                    color: 0xDEB887,
-                    roughness: 0.9,
-                    metalness: 0,
-                });
+                const cookieMat = new THREE.MeshStandardMaterial({ map: texture, roughness: 0.9, metalness: 0 });
                 const cookie = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 1.0, 0.2, 32), cookieMat);
                 cookie.position.y = 0.3;
                 cookie.castShadow = true;
                 productMesh.add(cookie);
 
-                // Chispas
-                const chipMat2 = new THREE.MeshStandardMaterial({
-                    color: 0x4a2c1b,
-                    roughness: 0.9,
-                    metalness: 0,
-                });
+                const chipMat2 = new THREE.MeshStandardMaterial({ color: 0x4a2c1b, roughness: 0.9, metalness: 0 });
                 for (let i = 0; i < 20; i++) {
-                    const chip = new THREE.Mesh(
-                        new THREE.SphereGeometry(0.05 + Math.random() * 0.04, 6, 6),
-                        chipMat2
-                    );
+                    const chip = new THREE.Mesh(new THREE.SphereGeometry(0.05 + Math.random() * 0.04, 6, 6), chipMat2);
                     const angle = Math.random() * Math.PI * 2;
                     const rad = 0.1 + Math.random() * 0.7;
-                    chip.position.set(
-                        Math.cos(angle) * rad,
-                        0.35,
-                        Math.sin(angle) * rad
-                    );
+                    chip.position.set(Math.cos(angle) * rad, 0.35, Math.sin(angle) * rad);
                     productMesh.add(chip);
                 }
                 productMesh.position.y = 0.3;
 
             } else if (type === 'pan') {
-                const panMat = new THREE.MeshStandardMaterial({
-                    color: 0xCC9A6B,
-                    roughness: 0.9,
-                    metalness: 0,
-                });
+                const panMat = new THREE.MeshStandardMaterial({ map: texture, roughness: 0.9, metalness: 0 });
                 const pan = new THREE.Mesh(new THREE.SphereGeometry(0.7, 32, 32), panMat);
                 pan.scale.set(1, 0.7, 1);
                 pan.position.y = 0.5;
                 pan.castShadow = true;
                 productMesh.add(pan);
 
-                // Corte en la parte superior
-                const cutMat = new THREE.MeshStandardMaterial({
-                    color: 0xDEB887,
-                    roughness: 0.8,
-                    metalness: 0,
-                });
+                const cutMat = new THREE.MeshStandardMaterial({ color: 0xDEB887, roughness: 0.8, metalness: 0 });
                 for (let i = 0; i < 3; i++) {
-                    const cut = new THREE.Mesh(
-                        new THREE.BoxGeometry(0.3, 0.02, 0.02),
-                        cutMat
-                    );
+                    const cut = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.02, 0.02), cutMat);
                     const angle = (i / 3) * Math.PI * 2;
-                    cut.position.set(
-                        Math.cos(angle) * 0.3,
-                        0.7,
-                        Math.sin(angle) * 0.3
-                    );
+                    cut.position.set(Math.cos(angle) * 0.3, 0.7, Math.sin(angle) * 0.3);
                     cut.rotation.y = angle;
                     productMesh.add(cut);
                 }
                 productMesh.position.y = 0.3;
 
             } else if (type === 'croissant') {
-                const croissantMat = new THREE.MeshStandardMaterial({
-                    color: 0xD4A574,
-                    roughness: 0.7,
-                    metalness: 0.05,
-                });
-                
-                // Cuerpo del croissant (forma de media luna)
+                const croissantMat = new THREE.MeshStandardMaterial({ map: texture, roughness: 0.7, metalness: 0.05 });
                 const curve = new THREE.CatmullRomCurve3([
                     new THREE.Vector3(-0.6, 0, 0),
                     new THREE.Vector3(-0.4, 0.3, 0.1),
@@ -1161,26 +1160,21 @@
                     new THREE.Vector3(0.4, 0.3, -0.1),
                     new THREE.Vector3(0.6, 0, 0)
                 ]);
-                
-                const tubeGeo = new THREE.TubeGeometry(curve, 20, 0.12, 8, false);
-                const tube = new THREE.Mesh(tubeGeo, croissantMat);
+                const tube = new THREE.Mesh(new THREE.TubeGeometry(curve, 20, 0.12, 8, false), croissantMat);
                 tube.position.y = 0.3;
                 tube.castShadow = true;
                 productMesh.add(tube);
 
-                // Segunda capa (más fina)
                 const tube2 = new THREE.Mesh(
                     new THREE.TubeGeometry(curve, 20, 0.08, 6, false),
-                    new THREE.MeshStandardMaterial({ color: 0xE8C8A0, roughness: 0.7 })
+                    new THREE.MeshStandardMaterial({ map: texture, roughness: 0.7 })
                 );
                 tube2.position.y = 0.32;
                 productMesh.add(tube2);
-
                 productMesh.position.y = 0.3;
                 productMesh.rotation.y = 0.5;
             }
 
-            // Escalar y posicionar
             productMesh.position.y += 0.1;
             const s = 0.9;
             productMesh.scale.set(s, s, s);
@@ -1189,7 +1183,7 @@
             productMesh.children.forEach(child => {
                 if (child.material) {
                     child.material.emissive = new THREE.Color(0xff8844);
-                    child.material.emissiveIntensity = 0.1;
+                    child.material.emissiveIntensity = 0.08;
                 }
             });
         }
@@ -1204,7 +1198,6 @@
             bakingProgress = 0;
             isBaking = true;
             
-            // Resetear masa
             masa.visible = true;
             productMesh.visible = false;
             masa.scale.set(1, 0.5, 1);
@@ -1212,10 +1205,11 @@
             masa.children[0].material.color.setHex(0xDEB887);
             masa.children[0].material.emissiveIntensity = 0.05;
             
-            // Actualizar estado
             document.getElementById('statusText').textContent = '⏳ Amasando...';
             
-            // Actualizar botones
+            // Si la puerta está abierta, cerrarla para hornear
+            if (isDoorOpen) toggleDoor();
+            
             document.querySelectorAll('.product-selector button').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.product === productType);
             });
@@ -1225,10 +1219,7 @@
         // INICIALIZACIÓN
         // ============================================================
         document.addEventListener('DOMContentLoaded', () => {
-            // Iniciar horno
             initOven();
-
-            // Productos
             renderProducts();
             fetchCart();
 
@@ -1239,6 +1230,9 @@
                     startBaking(product);
                 });
             });
+
+            // Botón de apertura manual
+            document.getElementById('toggleDoorBtn').addEventListener('click', toggleDoor);
 
             // Eventos del carrito
             document.getElementById('cartToggle').addEventListener('click', () => {
@@ -1260,7 +1254,7 @@
         });
 
         // ============================================================
-        // INYECTAR ESTILO PARA ANIMACIÓN fadeUp
+        // INYECTAR ESTILO
         // ============================================================
         const style = document.createElement('style');
         style.textContent = `
