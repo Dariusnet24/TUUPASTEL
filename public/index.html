@@ -1,4 +1,4 @@
-}<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
@@ -476,14 +476,6 @@
             display: inline-flex;
             animation: fadeUp 0.5s ease;
         }
-        .oven-action-btn.add-to-cart {
-            background: var(--color-gold);
-            color: var(--color-text);
-        }
-        .oven-action-btn.add-to-cart:hover {
-            background: var(--color-gold-dark);
-            transform: scale(1.02);
-        }
         .oven-action-btn.hornear-again {
             background: rgba(255,255,255,0.15);
             color: #FFFFFF;
@@ -492,6 +484,27 @@
         }
         .oven-action-btn.hornear-again:hover {
             background: rgba(255,255,255,0.25);
+        }
+
+        /* Efecto de confeti/corazones para cuando se agrega al carrito */
+        .oven-confetti {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+            overflow: hidden;
+        }
+        .confetti-piece {
+            position: absolute;
+            font-size: 24px;
+            animation: confetti-fall 2s ease forwards;
+        }
+        @keyframes confetti-fall {
+            0% { opacity: 1; transform: translateY(-20px) rotate(0deg) scale(1); }
+            100% { opacity: 0; transform: translateY(600px) rotate(720deg) scale(0.5); }
         }
 
         @keyframes fadeUp {
@@ -985,6 +998,9 @@
             .oven-action-btn.show {
                 animation: none !important;
             }
+            .confetti-piece {
+                animation: none !important;
+            }
         }
     </style>
 </head>
@@ -1044,15 +1060,14 @@
             </video>
             <!-- GIF publicitario (se muestra al terminar) -->
             <img id="oven-gif" src="" alt="Publicidad del producto horneado" />
+            <!-- Confeti (celebración al agregar al carrito) -->
+            <div class="oven-confetti" id="confettiContainer"></div>
             <!-- Estado -->
             <div class="oven-overlay" id="bakingStatus" role="status">
                 <span class="dot" aria-hidden="true"></span>
                 <span id="statusText">🎬 Selecciona un producto</span>
             </div>
-            <!-- Botones de acción (aparecen al terminar) -->
-            <button class="oven-action-btn add-to-cart" id="addToCartBtn">
-                🛒 Agregar al Carrito
-            </button>
+            <!-- Botón de acción (solo "Hornear otro") -->
             <button class="oven-action-btn hornear-again" id="hornearAgainBtn">
                 🔄 Hornear otro
             </button>
@@ -1120,7 +1135,7 @@
                 badge: '🔥 Popular',
                 video: '',
                 gif: 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDZyYXhldmJ3aTB6Y3pibDF2b2Fpa2N5ZDBkeGZ3cHJ3N3NjbmJvOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9dg/v7VDS5pnEggs3kqhnl/giphy.gif',
-                bakingTime: 5000  // 5 segundos
+                bakingTime: 4000
             },
             { 
                 id: 2, 
@@ -1129,9 +1144,9 @@
                 price: 5.00, 
                 icon: '🍫', 
                 badge: '⭐ Más vendido',
-                video: '',
-                gif: 'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExdzB2b3NlZDJ0ZXI5aXA3aWM0MTl5aG82cW1qNm5ycHI4M3NhNnZ2MyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l1J3R5tH91KiX9WZG/giphy.gif',
-                bakingTime: 6000
+                video: 'https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdTJhMW9yZmlsd3picGF1eTM2bXRjcXEyMTdqOXNkNjc2MnNwaDdiMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gIqguY2jmB31LZqWip/giphy.gif',
+                gif: 'https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdTJhMW9yZmlsd3picGF1eTM2bXRjcXEyMTdqOXNkNjc2MnNwaDdiMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gIqguY2jmB31LZqWip/giphy.gif',
+                bakingTime: 5000
             },
             { 
                 id: 3, 
@@ -1142,7 +1157,7 @@
                 badge: '🥇 Clásica',
                 video: 'https://www.w3schools.com/html/mov_bbb.mp4',
                 gif: 'https://media.giphy.com/media/3o6Zt5KzGKbUYWmUMU/giphy.gif',
-                bakingTime: 4000
+                bakingTime: 3500
             },
             { 
                 id: 4, 
@@ -1153,7 +1168,7 @@
                 badge: '🌾 Tradicional',
                 video: 'https://www.w3schools.com/html/mov_bbb.mp4',
                 gif: 'https://media.giphy.com/media/l0IylOPCNkiqOgMyA/giphy.gif',
-                bakingTime: 7000
+                bakingTime: 6000
             },
             { 
                 id: 5, 
@@ -1164,7 +1179,7 @@
                 badge: '🇫🇷 Premium',
                 video: 'https://www.w3schools.com/html/mov_bbb.mp4',
                 gif: 'https://media.giphy.com/media/3o6Zt6qW2lFfYMV2kI/giphy.gif',
-                bakingTime: 5000
+                bakingTime: 4500
             }
         ];
 
@@ -1181,8 +1196,8 @@
         const gifElement = document.getElementById('oven-gif');
         const statusText = document.getElementById('statusText');
         const statusOverlay = document.getElementById('bakingStatus');
-        const addToCartBtn = document.getElementById('addToCartBtn');
         const hornearAgainBtn = document.getElementById('hornearAgainBtn');
+        const confettiContainer = document.getElementById('confettiContainer');
         const toastContainer = document.getElementById('toastContainer');
         let toastTimeout = null;
 
@@ -1206,6 +1221,7 @@
             }
             updateCartUI();
             showToast(`✅ ${product.name} agregado al carrito`, 'success');
+            lanzarConfetti();
         }
 
         function changeQty(id, delta) {
@@ -1315,6 +1331,30 @@
         }
 
         // ============================================================
+        // CONFETTI (celebración)
+        // ============================================================
+        function lanzarConfetti() {
+            const emojis = ['🎉', '✨', '⭐', '❤️', '🎊', '💫', '🌟', '🍕', '🍫', '🥖'];
+            const container = confettiContainer;
+            
+            for (let i = 0; i < 20; i++) {
+                const piece = document.createElement('span');
+                piece.className = 'confetti-piece';
+                piece.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                piece.style.left = Math.random() * 100 + '%';
+                piece.style.fontSize = (16 + Math.random() * 24) + 'px';
+                piece.style.animationDelay = Math.random() * 0.5 + 's';
+                piece.style.animationDuration = (1.5 + Math.random() * 1) + 's';
+                container.appendChild(piece);
+                
+                // Limpiar después de la animación
+                setTimeout(() => {
+                    if (piece.parentNode) piece.remove();
+                }, 3000);
+            }
+        }
+
+        // ============================================================
         // RENDERIZAR PRODUCTOS
         // ============================================================
         function renderProducts() {
@@ -1351,7 +1391,7 @@
         }
 
         // ============================================================
-        // CONTROL DEL HORNO (VIDEO + GIF)
+        // CONTROL DEL HORNO (VIDEO + GIF + AGREGADO AUTOMÁTICO)
         // ============================================================
         function startBaking(productType) {
             // Limpiar timeout anterior
@@ -1374,9 +1414,9 @@
             // Resetear estado
             isBaking = true;
             productReady = false;
-            addToCartBtn.classList.remove('show');
             hornearAgainBtn.classList.remove('show');
             statusOverlay.classList.remove('done');
+            confettiContainer.innerHTML = ''; // Limpiar confeti
             
             // Mostrar video, ocultar GIF
             videoElement.style.display = 'block';
@@ -1416,38 +1456,17 @@
             gifElement.src = product.gif;
             
             // Actualizar estado
-            statusText.textContent = `✅ ¡${product.name} lista!`;
+            statusText.textContent = `✅ ¡${product.name} horneada!`;
             statusOverlay.classList.add('done');
             
-            // Mostrar botones de acción
-            addToCartBtn.classList.add('show');
+            // Mostrar botón "Hornear otro"
             hornearAgainBtn.classList.add('show');
             
-            // Actualizar el texto del botón de agregar
-            addToCartBtn.innerHTML = `🛒 Agregar ${product.icon} al Carrito`;
+            // 🚀 AGREGAR AUTOMÁTICAMENTE AL CARRITO
+            addToCart(product.id);
             
             // Efecto de "listo"
-            showToast(`🍕 ¡${product.name} recién horneada!`, 'success');
-        }
-
-        function addCurrentProductToCart() {
-            if (!productReady) return;
-            
-            const product = PRODUCTS.find(p => 
-                p.name.toLowerCase().includes(currentProduct) || 
-                (currentProduct === 'pizza' && p.id === 1) ||
-                (currentProduct === 'brownie' && p.id === 2) ||
-                (currentProduct === 'galleta' && p.id === 3) ||
-                (currentProduct === 'pan' && p.id === 4) ||
-                (currentProduct === 'croissant' && p.id === 5)
-            );
-            
-            if (product) {
-                addToCart(product.id);
-                // Ocultar botón después de agregar
-                addToCartBtn.classList.remove('show');
-                showToast(`✅ ${product.name} agregado al carrito`, 'success');
-            }
+            showToast(`🍕 ¡${product.name} recién horneada y agregada al carrito!`, 'success');
         }
 
         function resetOven() {
@@ -1459,9 +1478,9 @@
             
             // Resetear UI
             productReady = false;
-            addToCartBtn.classList.remove('show');
             hornearAgainBtn.classList.remove('show');
             statusOverlay.classList.remove('done');
+            confettiContainer.innerHTML = '';
             
             // Mostrar video, ocultar GIF
             videoElement.style.display = 'block';
@@ -1520,9 +1539,6 @@
                     showToast('⏳ Ya está horneando...', 'info');
                 }
             });
-
-            // Botón "Agregar al Carrito"
-            addToCartBtn.addEventListener('click', addCurrentProductToCart);
 
             // Botón "Hornear otro"
             hornearAgainBtn.addEventListener('click', () => {
