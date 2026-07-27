@@ -3,65 +3,67 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Dulce 3D - Pastelería Premium</title>
+    <title>Dulce 3D - Panadería Virtual</title>
     
-    <!-- Fuentes elegantes -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <!-- Fuentes elegantes y cálidas -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@300;400;500;600&family=Quicksand:wght@300;400;600;700&display=swap" rel="stylesheet" />
     
     <style>
         /* ===== RESET Y BASE ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            background: #0B0B0B;
-            color: #F8F4F0;
-            font-family: 'Inter', sans-serif;
+            background: #FDFBF7;
+            color: #2C1810;
+            font-family: 'Quicksand', sans-serif;
             overflow-x: hidden;
         }
 
         /* ===== SCROLLBAR ELEGANTE ===== */
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0B0B0B; }
+        ::-webkit-scrollbar-track { background: #FDFBF7; }
         ::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 10px; }
 
-        /* ===== HEADER ===== */
+        /* ===== HEADER (transparente con sombra suave) ===== */
         .header {
             position: fixed;
             top: 0; left: 0; width: 100%;
-            padding: 20px 50px;
+            padding: 18px 50px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            background: rgba(11, 11, 11, 0.6);
-            backdrop-filter: blur(14px);
+            background: rgba(253, 251, 247, 0.85);
+            backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(212, 175, 55, 0.15);
             transition: 0.3s;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.03);
         }
         .logo {
             font-family: 'Playfair Display', serif;
             font-size: 28px;
             font-weight: 700;
-            color: #D4AF37;
-            letter-spacing: 2px;
+            color: #2C1810;
+            letter-spacing: 1px;
         }
-        .logo span { color: #F8F4F0; font-weight: 300; }
+        .logo span { color: #D4AF37; }
         
         .nav a {
-            color: #F8F4F0;
+            color: #2C1810;
             text-decoration: none;
             margin: 0 25px;
-            font-size: 14px;
-            font-weight: 400;
-            letter-spacing: 1px;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
             transition: 0.3s;
             position: relative;
+            font-family: 'Quicksand', sans-serif;
         }
         .nav a::after {
             content: '';
             position: absolute;
             bottom: -4px; left: 0;
-            width: 0%; height: 1px;
+            width: 0%; height: 2px;
             background: #D4AF37;
             transition: 0.3s;
         }
@@ -72,13 +74,15 @@
             position: relative;
             cursor: pointer;
             font-size: 24px;
-            color: #D4AF37;
+            color: #2C1810;
+            transition: 0.3s;
         }
+        .cart-icon:hover { color: #D4AF37; }
         .cart-badge {
             position: absolute;
             top: -10px; right: -12px;
             background: #D4AF37;
-            color: #0B0B0B;
+            color: #FDFBF7;
             font-size: 11px;
             font-weight: 700;
             width: 22px; height: 22px;
@@ -86,194 +90,280 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Quicksand', sans-serif;
         }
 
-        /* ===== HERO CON FONDO 3D ===== */
+        /* ===== HERO - PANADERÍA VIRTUAL ===== */
         .hero {
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
-            text-align: center;
-            padding: 0 20px;
+            justify-content: center;
+            padding: 100px 50px 80px;
             position: relative;
             overflow: hidden;
+            background: linear-gradient(135deg, #FDFBF7 0%, #F5EDE4 100%);
         }
-        /* El canvas de Three.js ocupará todo el fondo */
         #hero-canvas {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.85;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            padding: 40px 0;
+        }
+        .hero-badge {
+            display: inline-block;
+            background: #D4AF37;
+            color: #FDFBF7;
+            padding: 6px 20px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 64px;
+            font-weight: 700;
+            color: #2C1810;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+        .hero h1 span {
+            color: #D4AF37;
+            font-style: italic;
+        }
+        .hero p {
+            font-size: 18px;
+            font-weight: 300;
+            color: #5a4a3a;
+            max-width: 450px;
+            margin-bottom: 35px;
+            line-height: 1.8;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .btn-gold {
+            background: #D4AF37;
+            color: #FDFBF7;
+            border: none;
+            padding: 14px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Quicksand', sans-serif;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.25);
+        }
+        .btn-gold:hover {
+            background: #C4A030;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.35);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #2C1810;
+            border: 2px solid #2C1810;
+            padding: 14px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Quicksand', sans-serif;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-outline:hover {
+            background: #2C1810;
+            color: #FDFBF7;
+            transform: translateY(-2px);
+        }
+
+        /* ===== DECORACIÓN DE HARINA / MIGAS (fondo) ===== */
+        .flour-particles {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            pointer-events: none;
             z-index: 0;
+            overflow: hidden;
         }
-        .hero-content {
-            position: relative;
-            z-index: 1;
+        .flour-particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            animation: floatFlour 20s infinite linear;
         }
-        .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 72px;
-            font-weight: 700;
-            color: #D4AF37;
-            text-shadow: 0 0 60px rgba(212, 175, 55, 0.3);
-            margin-bottom: 20px;
-            animation: fadeUp 1.2s ease;
-        }
-        .hero p {
-            font-size: 18px;
-            font-weight: 300;
-            color: #F8F4F0;
-            max-width: 500px;
-            margin-bottom: 40px;
-            text-shadow: 0 2px 20px rgba(0,0,0,0.5);
-            animation: fadeUp 1.4s ease;
-        }
-        .btn-gold {
-            background: #D4AF37;
-            color: #0B0B0B;
-            border: none;
-            padding: 16px 48px;
-            font-size: 16px;
-            font-weight: 600;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: 0.3s;
-            border-radius: 50px;
-            text-transform: uppercase;
-            animation: fadeUp 1.6s ease;
-        }
-        .btn-gold:hover {
-            background: #F9E79F;
-            box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
-            transform: scale(1.03);
+        @keyframes floatFlour {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
         }
 
-        @keyframes fadeUp {
-            0% { opacity: 0; transform: translateY(40px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ===== EFECTO PARALLAX EN SECCIONES ===== */
-        .section-divider {
-            height: 150px;
-            background: linear-gradient(180deg, transparent 0%, #0B0B0B 100%);
-            position: relative;
-            z-index: 2;
-        }
-
-        /* ===== SECCIÓN PRODUCTOS ===== */
+        /* ===== SECCIÓN DE PRODUCTOS ===== */
         .products-section {
-            padding: 80px 50px;
+            padding: 80px 50px 100px;
             max-width: 1300px;
             margin: 0 auto;
             position: relative;
-            z-index: 3;
-            background: radial-gradient(ellipse at 30% 20%, #1a1208 0%, #0B0B0B 70%);
+            z-index: 2;
+            background: #FDFBF7;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .section-tag {
+            display: inline-block;
+            background: #2C1810;
+            color: #FDFBF7;
+            padding: 4px 18px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            font-family: 'Quicksand', sans-serif;
         }
         .section-title {
             font-family: 'Playfair Display', serif;
             font-size: 44px;
-            color: #D4AF37;
-            text-align: center;
-            margin-bottom: 12px;
+            color: #2C1810;
+            margin-bottom: 8px;
         }
+        .section-title span { color: #D4AF37; }
         .section-sub {
-            text-align: center;
-            color: #B0B0B0;
+            color: #8a7a6a;
             font-weight: 300;
-            margin-bottom: 60px;
-            letter-spacing: 2px;
+            font-size: 17px;
+            font-family: 'Quicksand', sans-serif;
         }
 
         .grid-3d {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 40px;
         }
 
         .product-card {
-            background: rgba(248, 244, 240, 0.05);
-            backdrop-filter: blur(10px);
+            background: #FFFFFF;
             border-radius: 24px;
-            padding: 30px 20px 25px;
+            padding: 25px 20px 30px;
             text-align: center;
-            color: #F8F4F0;
             transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            border: 1px solid rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(44, 24, 16, 0.06);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
             position: relative;
-            overflow: hidden;
         }
         .product-card::before {
             content: '';
             position: absolute;
-            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            inset: 0;
+            border-radius: 24px;
+            padding: 1px;
             background: linear-gradient(135deg, #D4AF37, #F9E79F, #D4AF37);
-            border-radius: 26px;
-            z-index: -1;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
             opacity: 0;
             transition: 0.4s;
         }
         .product-card:hover::before { opacity: 1; }
         .product-card:hover {
-            transform: translateY(-10px) scale(1.01);
-            box-shadow: 0 30px 50px rgba(212, 175, 55, 0.15);
-            border-color: #D4AF37;
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.08);
         }
 
         .product-card .canvas-container {
             width: 100%;
-            height: 220px;
+            height: 240px;
             margin-bottom: 15px;
             border-radius: 16px;
             overflow: hidden;
-            background: rgba(26, 26, 26, 0.8);
+            background: #F8F4EF;
             cursor: grab;
         }
 
+        .product-card .product-badge {
+            display: inline-block;
+            background: #D4AF37;
+            color: #FDFBF7;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 14px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            font-family: 'Quicksand', sans-serif;
+        }
         .product-card h3 {
             font-size: 22px;
-            font-weight: 600;
+            font-weight: 700;
+            color: #2C1810;
             margin-bottom: 4px;
-            color: #D4AF37;
+            font-family: 'Playfair Display', serif;
         }
         .product-card .desc {
-            color: #B0B0B0;
+            color: #8a7a6a;
             font-size: 14px;
-            font-weight: 300;
-            margin-bottom: 12px;
+            font-weight: 400;
+            margin-bottom: 10px;
+            font-family: 'Quicksand', sans-serif;
         }
         .product-card .price {
             font-size: 28px;
             font-weight: 700;
             color: #D4AF37;
             margin-bottom: 16px;
+            font-family: 'Quicksand', sans-serif;
         }
         .btn-add {
-            background: transparent;
-            border: 2px solid #D4AF37;
-            color: #F8F4F0;
-            padding: 10px 32px;
-            border-radius: 40px;
+            background: #2C1810;
+            color: #FDFBF7;
+            border: none;
+            padding: 12px 36px;
+            border-radius: 50px;
             font-weight: 600;
             cursor: pointer;
             transition: 0.3s;
             font-size: 14px;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
+            font-family: 'Quicksand', sans-serif;
         }
         .btn-add:hover {
             background: #D4AF37;
-            color: #0B0B0B;
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.25);
         }
 
-        /* ===== SECCIÓN "EL HORNO" (fondo narrativo) ===== */
+        /* ===== SECCIÓN "EL HORNO" (estilo panadería) ===== */
         .oven-section {
-            padding: 100px 50px;
-            background: radial-gradient(ellipse at 70% 50%, #1a0f06 0%, #0B0B0B 70%);
+            padding: 80px 50px;
+            background: linear-gradient(135deg, #F8F4EF 0%, #EDE5DA 100%);
             position: relative;
             overflow: hidden;
             border-top: 1px solid rgba(212, 175, 55, 0.1);
@@ -282,8 +372,8 @@
         .oven-section .oven-canvas {
             position: absolute;
             top: 0;
-            left: 0;
-            width: 100%;
+            right: 0;
+            width: 55%;
             height: 100%;
             z-index: 0;
             opacity: 0.6;
@@ -291,26 +381,28 @@
         .oven-content {
             position: relative;
             z-index: 1;
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
+            max-width: 550px;
+        }
+        .oven-content .section-tag {
+            background: #D4AF37;
         }
         .oven-content h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 48px;
-            color: #D4AF37;
-            margin-bottom: 20px;
-            text-shadow: 0 0 40px rgba(212, 175, 55, 0.2);
+            font-size: 42px;
+            color: #2C1810;
+            margin-bottom: 16px;
         }
+        .oven-content h2 span { color: #D4AF37; }
         .oven-content p {
-            color: #B0B0B0;
-            font-size: 18px;
-            line-height: 1.8;
+            color: #5a4a3a;
+            font-size: 17px;
+            line-height: 1.9;
             font-weight: 300;
+            font-family: 'Quicksand', sans-serif;
         }
         .oven-content .highlight {
             color: #D4AF37;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         /* ===== CARRITO LATERAL ===== */
@@ -319,34 +411,35 @@
             top: 0; right: -450px;
             width: 420px;
             height: 100vh;
-            background: #0B0B0B;
+            background: #FDFBF7;
             border-left: 2px solid #D4AF37;
             z-index: 2000;
             padding: 30px 25px;
             transition: 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             overflow-y: auto;
-            box-shadow: -20px 0 60px rgba(0,0,0,0.8);
+            box-shadow: -20px 0 60px rgba(0,0,0,0.05);
         }
         .cart-overlay.open { right: 0; }
 
         .cart-overlay h2 {
             font-family: 'Playfair Display', serif;
-            color: #D4AF37;
+            color: #2C1810;
             font-size: 32px;
             margin-bottom: 30px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            border-bottom: 2px solid rgba(212, 175, 55, 0.15);
             padding-bottom: 12px;
         }
+        .cart-overlay h2 span { color: #D4AF37; }
         .cart-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(44, 24, 16, 0.06);
         }
         .cart-item-info { flex: 1; }
-        .cart-item-name { font-weight: 400; }
-        .cart-item-price { color: #D4AF37; font-weight: 600; }
+        .cart-item-name { font-weight: 600; color: #2C1810; }
+        .cart-item-price { color: #D4AF37; font-weight: 700; }
         .cart-item-qty {
             display: flex;
             align-items: center;
@@ -361,24 +454,26 @@
             cursor: pointer;
             font-size: 16px;
             transition: 0.2s;
+            font-weight: 600;
         }
-        .cart-item-qty button:hover { background: #D4AF37; color: #0B0B0B; }
-        .cart-item-qty span { min-width: 20px; text-align: center; }
+        .cart-item-qty button:hover { background: #D4AF37; color: #FDFBF7; }
+        .cart-item-qty span { min-width: 20px; text-align: center; font-weight: 600; }
 
         .cart-total {
             margin-top: 30px;
             font-size: 22px;
             text-align: right;
-            color: #F8F4F0;
+            color: #2C1810;
             border-top: 2px solid #D4AF37;
             padding-top: 20px;
+            font-weight: 600;
         }
         .cart-total span { color: #D4AF37; font-weight: 700; }
 
         .btn-checkout {
             width: 100%;
             background: #D4AF37;
-            color: #0B0B0B;
+            color: #FDFBF7;
             border: none;
             padding: 16px;
             font-size: 18px;
@@ -389,49 +484,63 @@
             transition: 0.3s;
             text-transform: uppercase;
             letter-spacing: 2px;
+            font-family: 'Quicksand', sans-serif;
         }
-        .btn-checkout:hover { background: #F9E79F; transform: scale(1.02); }
+        .btn-checkout:hover { background: #C4A030; transform: scale(1.01); }
 
         .close-cart {
             position: absolute;
             top: 20px; right: 25px;
-            font-size: 30px;
-            color: #D4AF37;
+            font-size: 28px;
+            color: #2C1810;
             cursor: pointer;
             background: none;
             border: none;
             transition: 0.3s;
+            font-weight: 300;
         }
-        .close-cart:hover { transform: rotate(90deg); }
+        .close-cart:hover { transform: rotate(90deg); color: #D4AF37; }
 
         .cart-empty {
             text-align: center;
-            color: #B0B0B0;
+            color: #8a7a6a;
             margin-top: 60px;
             font-size: 18px;
+            font-weight: 300;
         }
 
         /* ===== FOOTER ===== */
         .footer {
             text-align: center;
             padding: 40px 20px;
-            border-top: 1px solid rgba(212, 175, 55, 0.1);
-            color: #B0B0B0;
+            background: #FDFBF7;
+            border-top: 1px solid rgba(44, 24, 16, 0.04);
+            color: #8a7a6a;
             font-size: 14px;
-            letter-spacing: 1px;
-            position: relative;
-            z-index: 3;
+            letter-spacing: 0.5px;
+            font-family: 'Quicksand', sans-serif;
         }
-        .footer strong { color: #D4AF37; font-weight: 400; }
+        .footer strong { color: #D4AF37; font-weight: 600; }
 
         /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            #hero-canvas { width: 50%; }
+            .oven-section .oven-canvas { width: 45%; }
+        }
         @media (max-width: 768px) {
             .header { padding: 15px 20px; flex-wrap: wrap; }
             .nav { display: none; }
+            .hero { flex-direction: column; padding: 100px 20px 60px; text-align: center; }
+            #hero-canvas { width: 100%; height: 50%; top: auto; bottom: 0; opacity: 0.4; }
             .hero h1 { font-size: 40px; }
-            .products-section { padding: 40px 20px; }
+            .hero p { margin: 0 auto 30px; }
+            .hero-buttons { justify-content: center; }
+            .products-section { padding: 50px 20px 70px; }
+            .oven-section { padding: 50px 20px; text-align: center; }
+            .oven-section .oven-canvas { width: 100%; height: 50%; top: auto; bottom: 0; }
+            .oven-content { max-width: 100%; }
             .cart-overlay { width: 100%; right: -100%; }
-            .oven-section { padding: 60px 20px; }
+            .section-title { font-size: 32px; }
             .oven-content h2 { font-size: 32px; }
         }
     </style>
@@ -442,7 +551,7 @@
     <header class="header">
         <div class="logo">Dulce<span>3D</span></div>
         <nav class="nav">
-            <a href="#">Inicio</a>
+            <a href="#inicio">Inicio</a>
             <a href="#products">Productos</a>
             <a href="#horno">Nuestro Horno</a>
             <a href="#">Contacto</a>
@@ -453,44 +562,62 @@
         </div>
     </header>
 
-    <!-- ===== HERO CON FONDO 3D ===== -->
+    <!-- ===== HERO - PANADERÍA VIRTUAL ===== -->
     <section class="hero" id="inicio">
-        <!-- Canvas para Three.js (fondo) -->
+        <!-- Fondo 3D a la derecha -->
         <div id="hero-canvas"></div>
-        <!-- Contenido sobre el fondo -->
+        
+        <!-- Partículas decorativas de harina -->
+        <div class="flour-particles" id="flourParticles"></div>
+
         <div class="hero-content">
-            <h1>Placer Horneado en 3D</h1>
-            <p>Brownies, tortas y galletas con chispas de chocolate belga. Una experiencia visual y gastronómica única.</p>
-            <button class="btn-gold" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
-                Explorar Menú
-            </button>
+            <div class="hero-badge">🏠 Panadería Artesanal</div>
+            <h1>El sabor de <span>casa</span><br>en 3D</h1>
+            <p>
+                Brownies, tortas y galletas horneadas con amor, 
+                usando chocolate belga y los mejores ingredientes.
+                <br>¡Mira, gira y elige tu favorito!
+            </p>
+            <div class="hero-buttons">
+                <button class="btn-gold" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+                    Ver Productos
+                </button>
+                <button class="btn-outline" onclick="document.getElementById('horno').scrollIntoView({behavior:'smooth'})">
+                    Conoce el Horno
+                </button>
+            </div>
         </div>
     </section>
 
-    <!-- ===== DIVISOR ===== -->
-    <div class="section-divider"></div>
-
     <!-- ===== PRODUCTOS 3D ===== -->
     <section class="products-section" id="products">
-        <h2 class="section-title">Nuestras Creaciones</h2>
-        <p class="section-sub">— Interactúa girando cada modelo 3D —</p>
+        <div class="section-header">
+            <div class="section-tag">🍪 Nuestra Selección</div>
+            <h2 class="section-title">Hechos con <span>pasión</span></h2>
+            <p class="section-sub">Cada producto es único, como en una panadería de verdad</p>
+        </div>
 
         <div class="grid-3d" id="productGrid">
             <!-- Los productos se inyectan con JS -->
         </div>
     </section>
 
-    <!-- ===== SECCIÓN "EL HORNO" (fondo narrativo 3D) ===== -->
+    <!-- ===== SECCIÓN "EL HORNO" ===== -->
     <section class="oven-section" id="horno">
         <div class="oven-canvas" id="oven-canvas"></div>
         <div class="oven-content">
-            <h2>🔥 El arte del horneado</h2>
+            <div class="section-tag">🔥 Tradición</div>
+            <h2>Donde el <span>calor</span> hace magia</h2>
             <p>
-                Cada una de nuestras creaciones nace en un <span class="highlight">horno de piedra</span>, 
-                donde la temperatura y el tiempo se combinan para lograr la textura perfecta. 
+                Nuestro horno de piedra mantiene la temperatura perfecta 
+                para que cada brownie tenga esa <span class="highlight">textura crujiente por fuera</span> 
+                y <span class="highlight">suave por dentro</span>.
                 <br><br>
-                Usamos <span class="highlight">chocolate belga 70%</span> y mantequilla francesa 
-                para que cada bocado sea una experiencia inolvidable.
+                Usamos <span class="highlight">chocolate belga 70%</span> y 
+                <span class="highlight">mantequilla francesa</span> 
+                porque sabemos que los mejores ingredientes marcan la diferencia.
+                <br><br>
+                <span style="font-style: italic; color: #D4AF37;">— Como en la panadería de tu abuela, pero en 3D.</span>
             </p>
         </div>
     </section>
@@ -498,7 +625,7 @@
     <!-- ===== CARRITO LATERAL ===== -->
     <div class="cart-overlay" id="cartOverlay">
         <button class="close-cart" id="closeCart">✕</button>
-        <h2>Tu Pedido</h2>
+        <h2>Tu <span>pedido</span></h2>
         <div id="cartItems"></div>
         <div class="cart-total">Total: <span id="cartTotal">$0.00</span></div>
         <button class="btn-checkout" id="checkoutBtn">Proceder al Pago</button>
@@ -506,7 +633,7 @@
 
     <!-- ===== FOOTER ===== -->
     <footer class="footer">
-        <p>Hecho con <strong>chocolate</strong> y <strong>código</strong> · 2026</p>
+        <p>Hecho con <strong>❤️</strong> y <strong>chocolate</strong> · 2026</p>
     </footer>
 
     <!-- ===== THREE.JS ===== -->
@@ -527,7 +654,8 @@
                 desc: 'Chocolate belga 70% con nueces', 
                 price: 5.00, 
                 color: 0x4a2c1b,
-                secondary: 0x8B5A2B
+                secondary: 0x8B5A2B,
+                badge: '⭐ Más vendido'
             },
             { 
                 id: 2, 
@@ -535,7 +663,8 @@
                 desc: 'Tres capas con ganache dorado', 
                 price: 25.00, 
                 color: 0x2c1810,
-                secondary: 0xD4AF37
+                secondary: 0xD4AF37,
+                badge: '🎂 Especial'
             },
             { 
                 id: 3, 
@@ -543,7 +672,8 @@
                 desc: 'Chispas de chocolate y sal marina', 
                 price: 4.00, 
                 color: 0xdeb887,
-                secondary: 0x8B4513
+                secondary: 0x8B4513,
+                badge: '🍪 Clásica'
             }
         ];
 
@@ -627,7 +757,7 @@
                 if (result.success) {
                     cart = result.data;
                     updateCartUI();
-                    showToast('🗑️ Producto eliminado del carrito');
+                    showToast('🗑️ Producto eliminado');
                 }
             } catch (error) {
                 console.error('Error al eliminar del carrito:', error);
@@ -649,7 +779,7 @@
                 if (result.success) {
                     cart = [];
                     updateCartUI();
-                    showToast(`🎉 ¡Pedido realizado! Total: $${result.order.total.toFixed(2)}`);
+                    showToast(`🎉 ¡Gracias por tu pedido! Total: $${result.order.total.toFixed(2)}`);
                     document.getElementById('cartOverlay').classList.remove('open');
                 }
             } catch (error) {
@@ -686,7 +816,7 @@
                             <button onclick="changeQty(${item.id}, -1)">−</button>
                             <span>${item.qty}</span>
                             <button onclick="changeQty(${item.id}, 1)">+</button>
-                            <button onclick="removeFromCart(${item.id})" style="background:transparent;border:none;color:#D4AF37;font-size:18px;cursor:pointer;">✕</button>
+                            <button onclick="removeFromCart(${item.id})" style="background:transparent;border:none;color:#D4AF37;font-size:18px;cursor:pointer;font-weight:300;">✕</button>
                         </div>
                     </div>
                 `;
@@ -705,15 +835,15 @@
                 bottom: 30px;
                 left: 50%;
                 transform: translateX(-50%);
-                background: #D4AF37;
-                color: #0B0B0B;
-                padding: 15px 30px;
+                background: #2C1810;
+                color: #FDFBF7;
+                padding: 14px 30px;
                 border-radius: 50px;
                 font-weight: 600;
                 z-index: 9999;
-                box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3);
+                box-shadow: 0 10px 40px rgba(0,0,0,0.1);
                 animation: fadeUp 0.5s ease;
-                font-family: 'Inter', sans-serif;
+                font-family: 'Quicksand', sans-serif;
                 max-width: 90%;
                 text-align: center;
             `;
@@ -728,19 +858,38 @@
         }
 
         // ============================================================
-        // 5. THREE.JS - FONDO DEL HERO (Torta girando con efecto horno)
+        // 5. PARTÍCULAS DE HARINA (decoración)
+        // ============================================================
+        function createFlourParticles() {
+            const container = document.getElementById('flourParticles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'flour-particle';
+                const size = 4 + Math.random() * 15;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = 20 + Math.random() * 30 + 's';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.opacity = 0.2 + Math.random() * 0.3;
+                container.appendChild(particle);
+            }
+        }
+
+        // ============================================================
+        // 6. THREE.JS - FONDO DEL HERO (Torta estilo panadería)
         // ============================================================
         function createHeroBackground() {
             const container = document.getElementById('hero-canvas');
-            const width = window.innerWidth;
-            const height = window.innerHeight;
+            const width = container.clientWidth || window.innerWidth * 0.6;
+            const height = container.clientHeight || window.innerHeight;
 
             const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0B0B0B);
+            scene.background = new THREE.Color(0xFDFBF7);
 
-            const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-            camera.position.set(0, 2, 8);
-            camera.lookAt(0, 0, 0);
+            const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
+            camera.position.set(0, 1.8, 6);
+            camera.lookAt(0, 0.5, 0);
 
             const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(width, height);
@@ -749,53 +898,33 @@
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             container.appendChild(renderer.domElement);
 
-            // Luces dramáticas (efecto horno)
-            const ambient = new THREE.AmbientLight(0xff8844, 0.3);
+            // Luces suaves y cálidas
+            const ambient = new THREE.AmbientLight(0xffeedd, 0.6);
             scene.add(ambient);
 
-            const keyLight = new THREE.DirectionalLight(0xff6633, 2.0);
-            keyLight.position.set(2, 4, 5);
+            const keyLight = new THREE.DirectionalLight(0xffddcc, 1.5);
+            keyLight.position.set(3, 5, 4);
             keyLight.castShadow = true;
             scene.add(keyLight);
 
-            const fillLight = new THREE.DirectionalLight(0xffaa44, 0.6);
+            const fillLight = new THREE.DirectionalLight(0xffccbb, 0.5);
             fillLight.position.set(-3, 2, 3);
             scene.add(fillLight);
 
-            const backLight = new THREE.DirectionalLight(0xff4400, 0.8);
-            backLight.position.set(0, 0, -5);
-            scene.add(backLight);
+            const rimLight = new THREE.DirectionalLight(0xffffff, 0.3);
+            rimLight.position.set(0, 0, -5);
+            scene.add(rimLight);
 
-            // Partículas de calor (chispas de fuego/horno)
-            const particleCount = 500;
-            const particlesGeo = new THREE.BufferGeometry();
-            const particlePos = new Float32Array(particleCount * 3);
-            for (let i = 0; i < particleCount * 3; i++) {
-                particlePos[i] = (Math.random() - 0.5) * 20;
-            }
-            particlesGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
-            const particleMat = new THREE.PointsMaterial({
-                color: 0xff6633,
-                size: 0.08,
-                transparent: true,
-                opacity: 0.6,
-                blending: THREE.AdditiveBlending
-            });
-            const particles = new THREE.Points(particlesGeo, particleMat);
-            scene.add(particles);
-
-            // Crear la torta (grupo de cilindros - estilo horno)
+            // Crear la torta (estilo panadería - más suave y "casero")
             const cakeGroup = new THREE.Group();
             
-            // Base de la torta
+            // Base - color pan horneado
             const baseMat = new THREE.MeshStandardMaterial({ 
-                color: 0x2c1810, 
-                roughness: 0.7,
-                metalness: 0.1,
-                emissive: new THREE.Color(0x1a0a05),
-                emissiveIntensity: 0.1
+                color: 0x8B6B4A, 
+                roughness: 0.8,
+                metalness: 0.05
             });
-            const base = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 0.6, 32), baseMat);
+            const base = new THREE.Mesh(new THREE.CylinderGeometry(1.6, 1.7, 0.6, 32), baseMat);
             base.position.y = 0.3;
             base.castShadow = true;
             cakeGroup.add(base);
@@ -803,114 +932,122 @@
             // Capa de crema dorada
             const creamMat = new THREE.MeshStandardMaterial({ 
                 color: 0xD4AF37, 
-                roughness: 0.3, 
-                metalness: 0.4,
-                emissive: new THREE.Color(0xD4AF37),
-                emissiveIntensity: 0.05
+                roughness: 0.2, 
+                metalness: 0.1
             });
-            const cream1 = new THREE.Mesh(new THREE.CylinderGeometry(1.4, 1.4, 0.15, 32), creamMat);
+            const cream1 = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 0.15, 32), creamMat);
             cream1.position.y = 0.7;
             cakeGroup.add(cream1);
 
-            // Segunda capa
-            const mid = new THREE.Mesh(new THREE.CylinderGeometry(1.3, 1.3, 0.5, 32), baseMat);
+            // Segunda capa de pan
+            const midMat = new THREE.MeshStandardMaterial({ 
+                color: 0x9B7B5A, 
+                roughness: 0.8,
+                metalness: 0.05
+            });
+            const mid = new THREE.Mesh(new THREE.CylinderGeometry(1.4, 1.4, 0.5, 32), midMat);
             mid.position.y = 1.0;
             mid.castShadow = true;
             cakeGroup.add(mid);
 
-            const cream2 = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 0.15, 32), creamMat);
+            const cream2 = new THREE.Mesh(new THREE.CylinderGeometry(1.3, 1.3, 0.15, 32), creamMat);
             cream2.position.y = 1.3;
             cakeGroup.add(cream2);
 
-            // Tapa superior
-            const top = new THREE.Mesh(new THREE.CylinderGeometry(1.1, 1.1, 0.5, 32), baseMat);
+            // Tapa superior (más dorada)
+            const topMat = new THREE.MeshStandardMaterial({ 
+                color: 0xA87B4A, 
+                roughness: 0.7,
+                metalness: 0.05
+            });
+            const top = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 0.5, 32), topMat);
             top.position.y = 1.6;
             top.castShadow = true;
             cakeGroup.add(top);
 
-            // Decoraciones doradas (chispas de "calor")
-            for (let i = 0; i < 20; i++) {
-                const deco = new THREE.Mesh(
-                    new THREE.SphereGeometry(0.08 + Math.random() * 0.06, 6, 6),
+            // Decoraciones - chispas de chocolate
+            for (let i = 0; i < 25; i++) {
+                const chip = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.04 + Math.random() * 0.05, 6, 6),
                     new THREE.MeshStandardMaterial({ 
-                        color: 0xD4AF37, 
-                        emissive: 0xff4400,
-                        emissiveIntensity: 0.1 + Math.random() * 0.2
+                        color: 0x3d1f00, 
+                        roughness: 0.9,
+                        metalness: 0
                     })
                 );
                 const angle = Math.random() * Math.PI * 2;
-                const rad = 0.6 + Math.random() * 0.5;
-                deco.position.set(
+                const rad = 0.5 + Math.random() * 0.6;
+                chip.position.set(
                     Math.cos(angle) * rad,
-                    1.9 + Math.random() * 0.2,
+                    1.85 + Math.random() * 0.15,
                     Math.sin(angle) * rad
                 );
-                cakeGroup.add(deco);
+                cakeGroup.add(chip);
             }
 
-            // "Llama" o resplandor encima de la torta
-            const glowGeo = new THREE.SphereGeometry(0.2, 8, 8);
-            const glowMat = new THREE.MeshStandardMaterial({
-                color: 0xff4400,
-                emissive: 0xff4400,
-                emissiveIntensity: 2,
+            // Vapor suave (partículas blancas)
+            const vaporCount = 60;
+            const vaporGeo = new THREE.BufferGeometry();
+            const vaporPos = new Float32Array(vaporCount * 3);
+            for (let i = 0; i < vaporCount * 3; i++) {
+                vaporPos[i] = (Math.random() - 0.5) * 4;
+                if (i % 3 === 1) vaporPos[i] = Math.random() * 2 + 1.5;
+            }
+            vaporGeo.setAttribute('position', new THREE.BufferAttribute(vaporPos, 3));
+            const vaporMat = new THREE.PointsMaterial({
+                color: 0xffffff,
+                size: 0.03,
                 transparent: true,
-                opacity: 0.3
+                opacity: 0.3,
+                blending: THREE.AdditiveBlending
             });
-            const glow = new THREE.Mesh(glowGeo, glowMat);
-            glow.position.set(0, 2.4, 0);
-            cakeGroup.add(glow);
+            const vapor = new THREE.Points(vaporGeo, vaporMat);
+            cakeGroup.add(vapor);
 
             scene.add(cakeGroup);
 
-            // Efecto de "horno" - anillo de luz cálida
-            const ringGeo = new THREE.RingGeometry(2.5, 3.5, 64);
-            const ringMat = new THREE.MeshBasicMaterial({
-                color: 0xff4400,
+            // Suelo suave (efecto "mesa de madera")
+            const floorGeo = new THREE.PlaneGeometry(8, 8);
+            const floorMat = new THREE.MeshStandardMaterial({
+                color: 0xEDE5DA,
+                roughness: 0.9,
+                metalness: 0,
                 transparent: true,
-                opacity: 0.05,
-                side: THREE.DoubleSide
+                opacity: 0.5
             });
-            const ring = new THREE.Mesh(ringGeo, ringMat);
-            ring.rotation.x = -Math.PI / 2;
-            ring.position.y = -0.5;
-            scene.add(ring);
+            const floor = new THREE.Mesh(floorGeo, floorMat);
+            floor.rotation.x = -Math.PI / 2;
+            floor.position.y = -0.3;
+            floor.receiveShadow = true;
+            scene.add(floor);
 
             // Controles
             const controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
             controls.autoRotate = true;
-            controls.autoRotateSpeed = 0.8;
+            controls.autoRotateSpeed = 0.6;
             controls.enableZoom = false;
             controls.enablePan = false;
             controls.target.set(0, 0.8, 0);
             controls.update();
 
             // Animación
-            let time = 0;
             function animate() {
                 requestAnimationFrame(animate);
-                time += 0.01;
 
-                // Mover partículas (efecto de calor ascendente)
-                const positions = particles.geometry.attributes.position.array;
+                // Vapor ascendente
+                const positions = vapor.geometry.attributes.position.array;
                 for (let i = 0; i < positions.length; i += 3) {
-                    positions[i + 1] += 0.01;
-                    if (positions[i + 1] > 5) {
-                        positions[i + 1] = -5;
-                        positions[i] = (Math.random() - 0.5) * 20;
-                        positions[i + 2] = (Math.random() - 0.5) * 20;
+                    positions[i + 1] += 0.003;
+                    positions[i] += (Math.random() - 0.5) * 0.002;
+                    if (positions[i + 1] > 3.5) {
+                        positions[i + 1] = 1.5;
+                        positions[i] = (Math.random() - 0.5) * 3;
+                        positions[i + 2] = (Math.random() - 0.5) * 3;
                     }
                 }
-                particles.geometry.attributes.position.needsUpdate = true;
-
-                // Animar el resplandor (pulsación)
-                glow.scale.setScalar(1 + Math.sin(time * 2) * 0.3);
-                glowMat.opacity = 0.2 + Math.sin(time * 3) * 0.15;
-
-                // Animar la intensidad de la luz
-                keyLight.intensity = 1.8 + Math.sin(time * 1.5) * 0.3;
+                vapor.geometry.attributes.position.needsUpdate = true;
 
                 controls.update();
                 renderer.render(scene, camera);
@@ -919,8 +1056,8 @@
 
             // Resize
             window.addEventListener('resize', () => {
-                const w = window.innerWidth;
-                const h = window.innerHeight;
+                const w = container.clientWidth || window.innerWidth * 0.6;
+                const h = container.clientHeight || window.innerHeight;
                 camera.aspect = w / h;
                 camera.updateProjectionMatrix();
                 renderer.setSize(w, h);
@@ -928,19 +1065,19 @@
         }
 
         // ============================================================
-        // 6. THREE.JS - FONDO DEL HORNO (Horno 3D)
+        // 7. THREE.JS - FONDO DEL HORNO (estilo panadería)
         // ============================================================
         function createOvenBackground() {
             const container = document.getElementById('oven-canvas');
-            const width = container.clientWidth || window.innerWidth;
+            const width = container.clientWidth || window.innerWidth * 0.55;
             const height = container.clientHeight || 400;
 
             const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0a0a0a);
+            scene.background = new THREE.Color(0xF8F4EF);
 
-            const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
-            camera.position.set(0, 1.5, 6);
-            camera.lookAt(0, 0, 0);
+            const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+            camera.position.set(2, 1.5, 5);
+            camera.lookAt(0, 0.8, 0);
 
             const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(width, height);
@@ -948,90 +1085,84 @@
             renderer.shadowMap.enabled = true;
             container.appendChild(renderer.domElement);
 
-            // Luces
-            const ambient = new THREE.AmbientLight(0x333333, 0.5);
+            // Luces cálidas
+            const ambient = new THREE.AmbientLight(0xffeedd, 0.6);
             scene.add(ambient);
 
-            const mainLight = new THREE.DirectionalLight(0xff8844, 1.5);
-            mainLight.position.set(3, 4, 4);
+            const mainLight = new THREE.DirectionalLight(0xffcc88, 1.8);
+            mainLight.position.set(3, 4, 5);
             mainLight.castShadow = true;
             scene.add(mainLight);
 
-            const fillLight = new THREE.DirectionalLight(0x4488ff, 0.3);
+            const fillLight = new THREE.DirectionalLight(0x4488ff, 0.2);
             fillLight.position.set(-3, 0, 2);
             scene.add(fillLight);
 
-            // Crear un horno simple (caja con puerta abierta)
+            // Horno de panadería (más rústico)
             const ovenGroup = new THREE.Group();
 
-            // Cuerpo del horno
+            // Cuerpo del horno (blanco/mármol)
             const bodyMat = new THREE.MeshStandardMaterial({ 
-                color: 0x2a2a2a, 
-                roughness: 0.4, 
-                metalness: 0.7 
+                color: 0xF0EBE6, 
+                roughness: 0.6, 
+                metalness: 0.1 
             });
-            const body = new THREE.Mesh(new THREE.BoxGeometry(3.5, 2.5, 2.5), bodyMat);
-            body.position.y = 1.25;
+            const body = new THREE.Mesh(new THREE.BoxGeometry(3.2, 2.2, 2.2), bodyMat);
+            body.position.y = 1.1;
             body.castShadow = true;
             ovenGroup.add(body);
 
-            // Puerta del horno (abierta, simulando calor)
+            // Puerta del horno (vidrio con reflejo)
             const doorMat = new THREE.MeshStandardMaterial({ 
-                color: 0x1a1a1a, 
-                roughness: 0.3, 
-                metalness: 0.8,
+                color: 0x2C1810, 
+                roughness: 0.1, 
+                metalness: 0.3,
                 transparent: true,
-                opacity: 0.5
+                opacity: 0.4
             });
-            const door = new THREE.Mesh(new THREE.BoxGeometry(2.8, 1.8, 0.1), doorMat);
-            door.position.set(0, 1.3, 1.6);
-            door.rotation.y = 0.5;
+            const door = new THREE.Mesh(new THREE.BoxGeometry(2.5, 1.6, 0.08), doorMat);
+            door.position.set(0, 1.1, 1.4);
             ovenGroup.add(door);
 
-            // Luz interior (calor)
+            // Marco de la puerta (dorado)
+            const frameMat = new THREE.MeshStandardMaterial({ 
+                color: 0xD4AF37, 
+                roughness: 0.3, 
+                metalness: 0.6 
+            });
+            const frame = new THREE.Mesh(new THREE.BoxGeometry(2.7, 1.8, 0.05), frameMat);
+            frame.position.set(0, 1.1, 1.35);
+            ovenGroup.add(frame);
+
+            // Luz interior
             const interiorLight = new THREE.Mesh(
-                new THREE.PlaneGeometry(2.5, 1.5),
+                new THREE.PlaneGeometry(2.2, 1.3),
                 new THREE.MeshBasicMaterial({ 
-                    color: 0xff4400, 
+                    color: 0xff8844, 
                     transparent: true, 
-                    opacity: 0.3,
+                    opacity: 0.2,
                     side: THREE.DoubleSide
                 })
             );
-            interiorLight.position.set(0, 1.3, 1.3);
+            interiorLight.position.set(0, 1.1, 1.2);
             ovenGroup.add(interiorLight);
 
-            // Parrilla interior
-            const grillMat = new THREE.MeshStandardMaterial({ 
-                color: 0x555555, 
-                roughness: 0.6, 
-                metalness: 0.9 
+            // Pan dentro del horno (bollo)
+            const breadMat = new THREE.MeshStandardMaterial({ 
+                color: 0xCC9A6B, 
+                roughness: 0.9,
+                metalness: 0
             });
-            for (let i = -0.8; i <= 0.8; i += 0.4) {
-                const bar = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.05, 1.8), grillMat);
-                bar.position.set(i, 0.5, 1.3);
-                ovenGroup.add(bar);
-            }
+            const bread = new THREE.Mesh(new THREE.SphereGeometry(0.4, 16, 16), breadMat);
+            bread.position.set(-0.5, 0.7, 1.2);
+            bread.scale.set(1, 0.6, 0.8);
+            bread.castShadow = true;
+            ovenGroup.add(bread);
 
-            // "Llamas" dentro del horno (partículas pequeñas)
-            const flameCount = 100;
-            const flameGeo = new THREE.BufferGeometry();
-            const flamePos = new Float32Array(flameCount * 3);
-            for (let i = 0; i < flameCount * 3; i++) {
-                flamePos[i] = (Math.random() - 0.5) * 2;
-                if (i % 3 === 1) flamePos[i] = Math.random() * 1.5 + 0.3;
-                if (i % 3 === 2) flamePos[i] += 1.3;
-            }
-            flameGeo.setAttribute('position', new THREE.BufferAttribute(flamePos, 3));
-            const flameMat = new THREE.PointsMaterial({
-                color: 0xff6633,
-                size: 0.06,
-                transparent: true,
-                opacity: 0.8,
-                blending: THREE.AdditiveBlending
-            });
-            const flames = new THREE.Points(flameGeo, flameMat);
-            ovenGroup.add(flames);
+            const bread2 = bread.clone();
+            bread2.position.set(0.5, 0.7, 1.1);
+            bread2.scale.set(0.8, 0.5, 0.7);
+            ovenGroup.add(bread2);
 
             scene.add(ovenGroup);
 
@@ -1040,30 +1171,18 @@
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
             controls.autoRotate = true;
-            controls.autoRotateSpeed = 0.3;
+            controls.autoRotateSpeed = 0.2;
             controls.enableZoom = false;
             controls.enablePan = false;
-            controls.target.set(0, 1.3, 0);
+            controls.target.set(0, 1.1, 0);
             controls.update();
 
             // Animación
             function animate() {
                 requestAnimationFrame(animate);
 
-                // Animar las llamas
-                const positions = flames.geometry.attributes.position.array;
-                for (let i = 0; i < positions.length; i += 3) {
-                    positions[i + 1] += 0.005;
-                    if (positions[i + 1] > 1.8) {
-                        positions[i + 1] = 0.3;
-                        positions[i] = (Math.random() - 0.5) * 2;
-                        positions[i + 2] = (Math.random() - 0.5) * 2 + 1.3;
-                    }
-                }
-                flames.geometry.attributes.position.needsUpdate = true;
-
                 // Pulsar la luz interior
-                interiorLight.material.opacity = 0.2 + Math.sin(Date.now() * 0.003) * 0.15;
+                interiorLight.material.opacity = 0.15 + Math.sin(Date.now() * 0.002) * 0.1;
 
                 controls.update();
                 renderer.render(scene, camera);
@@ -1072,7 +1191,7 @@
 
             // Resize
             window.addEventListener('resize', () => {
-                const w = container.clientWidth || window.innerWidth;
+                const w = container.clientWidth || window.innerWidth * 0.55;
                 const h = container.clientHeight || 400;
                 camera.aspect = w / h;
                 camera.updateProjectionMatrix();
@@ -1081,16 +1200,16 @@
         }
 
         // ============================================================
-        // 7. THREE.JS - MODELOS DE PRODUCTOS
+        // 8. THREE.JS - MODELOS DE PRODUCTOS (estilo panadería)
         // ============================================================
         function create3DModel(container, product) {
             const width = container.clientWidth || 300;
-            const height = container.clientHeight || 220;
+            const height = container.clientHeight || 240;
 
             const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x1a1a1a);
+            scene.background = new THREE.Color(0xF8F4EF);
 
-            const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+            const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
             camera.position.set(3, 1, 5);
             camera.lookAt(0, 0, 0);
 
@@ -1101,19 +1220,20 @@
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             container.appendChild(renderer.domElement);
 
-            const ambient = new THREE.AmbientLight(0x404060);
+            // Luces suaves
+            const ambient = new THREE.AmbientLight(0xffeedd, 0.7);
             scene.add(ambient);
 
             const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
-            keyLight.position.set(2, 5, 3);
+            keyLight.position.set(2, 4, 4);
             keyLight.castShadow = true;
             scene.add(keyLight);
 
-            const fillLight = new THREE.DirectionalLight(0xD4AF37, 0.6);
+            const fillLight = new THREE.DirectionalLight(0xffddcc, 0.4);
             fillLight.position.set(-3, 1, 2);
             scene.add(fillLight);
 
-            const rimLight = new THREE.DirectionalLight(0xffffff, 0.4);
+            const rimLight = new THREE.DirectionalLight(0xffffff, 0.2);
             rimLight.position.set(0, 0, -5);
             scene.add(rimLight);
 
@@ -1125,10 +1245,8 @@
                 const geo = new THREE.BoxGeometry(2, 0.8, 2);
                 const mat = new THREE.MeshStandardMaterial({ 
                     color: color, 
-                    roughness: 0.7, 
-                    metalness: 0.1,
-                    emissive: new THREE.Color(0x2a1a0a),
-                    emissiveIntensity: 0.15
+                    roughness: 0.8, 
+                    metalness: 0,
                 });
                 mesh = new THREE.Mesh(geo, mat);
                 mesh.castShadow = true;
@@ -1136,7 +1254,7 @@
                 for (let i = 0; i < 30; i++) {
                     const chip = new THREE.Mesh(
                         new THREE.SphereGeometry(0.08 + Math.random()*0.07, 6, 6),
-                        new THREE.MeshStandardMaterial({ color: secondary, roughness: 0.3, metalness: 0.4 })
+                        new THREE.MeshStandardMaterial({ color: secondary, roughness: 0.8, metalness: 0 })
                     );
                     chip.position.set(
                         (Math.random() - 0.5) * 1.8,
@@ -1148,8 +1266,8 @@
             } 
             else if (product.id === 2) {
                 const group = new THREE.Group();
-                const baseMat = new THREE.MeshStandardMaterial({ color: 0x2c1810, roughness: 0.6 });
-                const creamMat = new THREE.MeshStandardMaterial({ color: 0xD4AF37, roughness: 0.3, metalness: 0.2 });
+                const baseMat = new THREE.MeshStandardMaterial({ color: 0x2c1810, roughness: 0.7 });
+                const creamMat = new THREE.MeshStandardMaterial({ color: 0xD4AF37, roughness: 0.2, metalness: 0.1 });
                 
                 const base = new THREE.Mesh(new THREE.CylinderGeometry(1.4, 1.4, 0.6, 32), baseMat);
                 base.position.y = 0.3;
@@ -1174,7 +1292,7 @@
                 top.castShadow = true;
                 group.add(top);
 
-                const deco = new THREE.Mesh(new THREE.SphereGeometry(0.15, 8, 8), creamMat);
+                const deco = new THREE.Mesh(new THREE.SphereGeometry(0.12, 8, 8), creamMat);
                 deco.position.set(0, 1.9, 0.9);
                 group.add(deco);
                 const deco2 = deco.clone();
@@ -1188,7 +1306,7 @@
             } 
             else {
                 const group = new THREE.Group();
-                const mat = new THREE.MeshStandardMaterial({ color: 0xdeb887, roughness: 0.8 });
+                const mat = new THREE.MeshStandardMaterial({ color: 0xdeb887, roughness: 0.9 });
                 const cookie = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 0.3, 32), mat);
                 cookie.castShadow = true;
                 cookie.receiveShadow = true;
@@ -1197,7 +1315,7 @@
                 for (let i = 0; i < 20; i++) {
                     const chip = new THREE.Mesh(
                         new THREE.SphereGeometry(0.08 + Math.random()*0.06, 6, 6),
-                        new THREE.MeshStandardMaterial({ color: 0x4a2c1b, roughness: 0.4, metalness: 0.1 })
+                        new THREE.MeshStandardMaterial({ color: 0x4a2c1b, roughness: 0.8, metalness: 0 })
                     );
                     const angle = Math.random() * Math.PI * 2;
                     const rad = 0.3 + Math.random() * 0.8;
@@ -1209,17 +1327,18 @@
 
             scene.add(mesh);
 
+            // Suelo (estilo mesa de panadería)
             const floorGeo = new THREE.PlaneGeometry(6, 6);
-            const floorMat = new THREE.MeshStandardMaterial({ 
-                color: 0x0a0a0a, 
-                roughness: 0.1, 
-                metalness: 0.8,
+            const floorMat = new THREE.MeshStandardMaterial({
+                color: 0xEDE5DA,
+                roughness: 0.9,
+                metalness: 0,
                 transparent: true,
                 opacity: 0.5
             });
             const floor = new THREE.Mesh(floorGeo, floorMat);
             floor.rotation.x = -Math.PI / 2;
-            floor.position.y = -0.5;
+            floor.position.y = -0.3;
             floor.receiveShadow = true;
             scene.add(floor);
 
@@ -1227,10 +1346,10 @@
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
             controls.autoRotate = true;
-            controls.autoRotateSpeed = 1.8;
+            controls.autoRotateSpeed = 1.2;
             controls.enableZoom = false;
             controls.enablePan = false;
-            controls.target.set(0, 0.6, 0);
+            controls.target.set(0, 0.5, 0);
 
             function animate() {
                 requestAnimationFrame(animate);
@@ -1260,7 +1379,7 @@
         }
 
         // ============================================================
-        // 8. RENDERIZAR PRODUCTOS
+        // 9. RENDERIZAR PRODUCTOS
         // ============================================================
         function renderProducts() {
             const grid = document.getElementById('productGrid');
@@ -1270,6 +1389,7 @@
                 card.className = 'product-card';
                 card.innerHTML = `
                     <div class="canvas-container" id="canvas-${prod.id}"></div>
+                    <div class="product-badge">${prod.badge}</div>
                     <h3>${prod.name}</h3>
                     <p class="desc">${prod.desc}</p>
                     <div class="price">$${prod.price.toFixed(2)}</div>
@@ -1278,20 +1398,23 @@
                 grid.appendChild(card);
 
                 const container = card.querySelector('.canvas-container');
-                container.style.height = '220px';
+                container.style.height = '240px';
                 create3DModel(container, prod);
             });
         }
 
         // ============================================================
-        // 9. INICIALIZACIÓN
+        // 10. INICIALIZACIÓN
         // ============================================================
         document.addEventListener('DOMContentLoaded', () => {
-            // Inicializar fondos 3D
+            // Partículas decorativas
+            createFlourParticles();
+
+            // Fondos 3D
             createHeroBackground();
             createOvenBackground();
 
-            // Inicializar productos y carrito
+            // Productos y carrito
             fetchCart();
             renderProducts();
 
