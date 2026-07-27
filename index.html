@@ -415,9 +415,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
+    <!-- ============================================================ -->
+    <!-- CÓDIGO PRINCIPAL -->
+    <!-- ============================================================ -->
     <script>
         // ============================================================
-        // 1. DATOS DE PRODUCTOS (con colores para cada modelo 3D)
+        // 1. DATOS DE PRODUCTOS
         // ============================================================
         const PRODUCTS = [
             { 
@@ -447,48 +450,145 @@
         ];
 
         // ============================================================
-        // 2. CARRITO (con localStorage)
+        // 2. CARRITO CON API
         // ============================================================
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let cart = [];
 
-        function saveCart() {
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCartUI();
-        }
-
-        function addToCart(productId) {
-            const existing = cart.find(item => item.id === productId);
-            if (existing) {
-                existing.qty += 1;
-            } else {
-                const p = PRODUCTS.find(prod => prod.id === productId);
-                cart.push({ id: p.id, name: p.name, price: p.price, qty: 1 });
+        // Función para obtener el carrito desde el servidor
+        async function fetchCart() {
+            try {
+                const response = await fetch('/api/cart');
+                const result = await response.json();
+                if (result.success) {
+                    cart = result.data;
+                    updateCartUI();
+                }
+            } catch (error) {
+                console.error('Error al obtener el carrito:', error);
             }
-            saveCart();
         }
 
-        function removeFromCart(productId) {
-            cart = cart.filter(item => item.id !== productId);
-            saveCart();
+        // Función para agregar al carrito vía API
+        async function addToCart(productId) {
+            const product = PRODUCTS.find(p => p.id === productId);
+            if (!product) return;
+
+            try {
+                const response = await fetch('/api/cart/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        qty: 1
+                    })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    cart = result.data;
+                    updateCartUI();
+                    showToast(`✅ ${product.name} agregado al carrito`);
+                }
+            } catch (error) {
+                console.error('Error al agregar al carrito:', error);
+                showToast('❌ Error al agregar al carrito');
+            }
         }
 
-        function changeQty(productId, delta) {
+        // Función para cambiar cantidad
+        async function changeQty(productId, delta) {
             const item = cart.find(i => i.id === productId);
             if (!item) return;
-            item.qty += delta;
-            if (item.qty <= 0) {
-                removeFromCart(productId);
-            } else {
-                saveCart();
+
+            const newQty = item.qty + delta;
+            if (newQty <= 0) {
+                await removeFromCart(productId);
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/cart/update/${productId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ qty: newQty })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    cart = result.data;
+                    updateCartUI();
+                }
+            } catch (error) {
+                console.error('Error al actualizar cantidad:', error);
             }
         }
 
+        // Función para eliminar del carrito
+        async function removeFromCart(productId) {
+            try {
+                const response = await fetch(`/api/cart/remove/${productId}`, {
+                    method: 'DELETE'
+                });
+                const result = await response.json();
+                if (result.success) {
+                    cart = result.data;
+                    updateCartUI();
+                    showToast('🗑️ Producto eliminado del carrito');
+                }
+            } catch (error) {
+                console.error('Error al eliminar del carrito:', error);
+            }
+        }
+
+        // Función para vaciar el carrito
+        async function clearCart() {
+            try {
+                const response = await fetch('/api/cart/clear', {
+                    method: 'DELETE'
+                });
+                const result = await response.json();
+                if (result.success) {
+                    cart = result.data;
+                    updateCartUI();
+                    showToast('🗑️ Carrito vaciado');
+                }
+            } catch (error) {
+                console.error('Error al vaciar el carrito:', error);
+            }
+        }
+
+        // Función para checkout
+        async function checkout() {
+            if (cart.length === 0) {
+                showToast('🛒 Tu carrito está vacío');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const result = await response.json();
+                if (result.success) {
+                    cart = [];
+                    updateCartUI();
+                    showToast(`🎉 ¡Pedido realizado! Total: $${result.order.total.toFixed(2)}`);
+                    document.getElementById('cartOverlay').classList.remove('open');
+                }
+            } catch (error) {
+                console.error('Error en checkout:', error);
+                showToast('❌ Error al procesar el pedido');
+            }
+        }
+
+        // ============================================================
+        // 3. ACTUALIZAR UI DEL CARRITO
+        // ============================================================
         function updateCartUI() {
-            // Badge
             const totalItems = cart.reduce((acc, i) => acc + i.qty, 0);
             document.getElementById('cartCount').textContent = totalItems;
 
-            // Items
             const container = document.getElementById('cartItems');
             if (cart.length === 0) {
                 container.innerHTML = `<div class="cart-empty">🛒 Tu carrito está vacío</div>`;
@@ -510,6 +610,7 @@
                             <button onclick="changeQty(${item.id}, -1)">−</button>
                             <span>${item.qty}</span>
                             <button onclick="changeQty(${item.id}, 1)">+</button>
+                            <button onclick="removeFromCart(${item.id})" style="background:transparent;border:none;color:#D4AF37;font-size:18px;cursor:pointer;">✕</button>
                         </div>
                     </div>
                 `;
@@ -519,7 +620,39 @@
         }
 
         // ============================================================
-        // 3. THREE.JS - CREAR MODELOS 3D
+        // 4. TOAST NOTIFICATIONS
+        // ============================================================
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 30px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #D4AF37;
+                color: #0B0B0B;
+                padding: 15px 30px;
+                border-radius: 50px;
+                font-weight: 600;
+                z-index: 9999;
+                box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3);
+                animation: fadeUp 0.5s ease;
+                font-family: 'Inter', sans-serif;
+                max-width: 90%;
+                text-align: center;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.5s';
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
+        // ============================================================
+        // 5. THREE.JS - CREAR MODELOS 3D
         // ============================================================
         function create3DModel(container, product) {
             const width = container.clientWidth || 300;
@@ -561,7 +694,7 @@
             const color = product.color;
             const secondary = product.secondary;
 
-            if (product.id === 1) { // Brownie: caja con textura de "chocolate"
+            if (product.id === 1) {
                 const geo = new THREE.BoxGeometry(2, 0.8, 2);
                 const mat = new THREE.MeshStandardMaterial({ 
                     color: color, 
@@ -573,7 +706,6 @@
                 mesh = new THREE.Mesh(geo, mat);
                 mesh.castShadow = true;
                 mesh.receiveShadow = true;
-                // chispas (pequeñas esferas)
                 for (let i = 0; i < 30; i++) {
                     const chip = new THREE.Mesh(
                         new THREE.SphereGeometry(0.08 + Math.random()*0.07, 6, 6),
@@ -587,7 +719,7 @@
                     mesh.add(chip);
                 }
             } 
-            else if (product.id === 2) { // Torta: cilindro con capas
+            else if (product.id === 2) {
                 const group = new THREE.Group();
                 const baseMat = new THREE.MeshStandardMaterial({ color: 0x2c1810, roughness: 0.6 });
                 const creamMat = new THREE.MeshStandardMaterial({ color: 0xD4AF37, roughness: 0.3, metalness: 0.2 });
@@ -615,7 +747,6 @@
                 top.castShadow = true;
                 group.add(top);
 
-                // decoración dorada
                 const deco = new THREE.Mesh(new THREE.SphereGeometry(0.15, 8, 8), creamMat);
                 deco.position.set(0, 1.9, 0.9);
                 group.add(deco);
@@ -628,7 +759,7 @@
 
                 mesh = group;
             } 
-            else { // Galleta: disco con chispas
+            else {
                 const group = new THREE.Group();
                 const mat = new THREE.MeshStandardMaterial({ color: 0xdeb887, roughness: 0.8 });
                 const cookie = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 0.3, 32), mat);
@@ -636,7 +767,6 @@
                 cookie.receiveShadow = true;
                 group.add(cookie);
 
-                // chispas
                 for (let i = 0; i < 20; i++) {
                     const chip = new THREE.Mesh(
                         new THREE.SphereGeometry(0.08 + Math.random()*0.06, 6, 6),
@@ -652,7 +782,7 @@
 
             scene.add(mesh);
 
-            // Suelo reflejante (sutil)
+            // Suelo reflejante
             const floorGeo = new THREE.PlaneGeometry(6, 6);
             const floorMat = new THREE.MeshStandardMaterial({ 
                 color: 0x0a0a0a, 
@@ -667,7 +797,7 @@
             floor.receiveShadow = true;
             scene.add(floor);
 
-            // OrbitControls para interacción
+            // OrbitControls
             const controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
@@ -677,7 +807,6 @@
             controls.enablePan = false;
             controls.target.set(0, 0.6, 0);
 
-            // Animación
             function animate() {
                 requestAnimationFrame(animate);
                 controls.update();
@@ -685,7 +814,6 @@
             }
             animate();
 
-            // Redimensionar
             const resize = () => {
                 const w = container.clientWidth;
                 const h = container.clientHeight;
@@ -696,11 +824,9 @@
                 }
             };
             window.addEventListener('resize', resize);
-            // Si el contenedor cambia de tamaño por responsive
             const observer = new ResizeObserver(resize);
             observer.observe(container);
 
-            // Liberar memoria al recargar (opcional)
             container._cleanup = () => {
                 observer.disconnect();
                 window.removeEventListener('resize', resize);
@@ -709,7 +835,7 @@
         }
 
         // ============================================================
-        // 4. RENDERIZAR PRODUCTOS EN GRID
+        // 6. RENDERIZAR PRODUCTOS EN GRID
         // ============================================================
         function renderProducts() {
             const grid = document.getElementById('productGrid');
@@ -726,43 +852,36 @@
                 `;
                 grid.appendChild(card);
 
-                // Inicializar 3D después de insertar en DOM
                 const container = card.querySelector('.canvas-container');
-                // Darle altura fija
                 container.style.height = '220px';
                 create3DModel(container, prod);
             });
         }
 
         // ============================================================
-        // 5. EVENTOS Y ARRANQUE
+        // 7. INICIALIZACIÓN
         // ============================================================
         document.addEventListener('DOMContentLoaded', () => {
+            fetchCart();
             renderProducts();
-            updateCartUI();
 
-            // Toggle carrito
             document.getElementById('cartToggle').addEventListener('click', () => {
                 document.getElementById('cartOverlay').classList.toggle('open');
             });
             document.getElementById('closeCart').addEventListener('click', () => {
                 document.getElementById('cartOverlay').classList.remove('open');
             });
-            // Cerrar con clic fuera (opcional, mejor solo con botón)
 
-            // Checkout
-            document.getElementById('checkoutBtn').addEventListener('click', () => {
-                if (cart.length === 0) {
-                    alert('🛒 Tu carrito está vacío. Agrega algunos dulces.');
-                    return;
+            document.getElementById('checkoutBtn').addEventListener('click', checkout);
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.getElementById('cartOverlay').classList.remove('open');
                 }
-                alert('🍫 ¡Gracias por tu pedido! (Demo) Total: $' + 
-                    cart.reduce((acc, i) => acc + i.price * i.qty, 0).toFixed(2));
-                // Aquí conectarías con Stripe/MercadoPago
             });
         });
 
-        // Limpieza suave de los modelos 3D al salir (opcional)
+        // Limpieza
         window.addEventListener('beforeunload', () => {
             document.querySelectorAll('.canvas-container').forEach(el => {
                 if (el._cleanup) el._cleanup();
